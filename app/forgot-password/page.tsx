@@ -114,7 +114,7 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
 
-        <p className="relative text-blue-500 text-sm">Â© {new Date().getFullYear()} SCSIT Alumni Association</p>
+        <p className="relative text-blue-500 text-sm">© {new Date().getFullYear()} SCSIT Alumni Association</p>
       </div>
 
       {/* Right panel */}
@@ -201,7 +201,7 @@ export default function ForgotPasswordPage() {
                     className="w-full pl-11 pr-4 py-3.5 bg-blue-900/30 border border-blue-700/50 rounded-xl text-white placeholder-blue-500 focus:outline-none focus:border-yellow-500/60 focus:bg-blue-900/50 transition-all"
                     required />
                 </div>
-                <p className="text-xs text-blue-500">8+ chars Â· uppercase Â· lowercase Â· number Â· special character</p>
+                <p className="text-xs text-blue-500">8+ chars, uppercase, lowercase,number, special character</p>
                 <button type="submit" disabled={loading}
                   className="w-full flex items-center justify-center gap-2 py-3.5 bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-blue-950 font-bold rounded-xl transition-all shadow-lg shadow-yellow-500/20">
                   {loading ? "Resetting..." : <><span>Reset Password</span><ArrowRight size={18} /></>}
@@ -211,7 +211,7 @@ export default function ForgotPasswordPage() {
           </div>
 
           <p className="mt-6 text-center text-sm text-blue-400">
-            <Link href="/login" className="hover:text-blue-300 transition-colors">â† Back to Login</Link>
+            <Link href="/login" className="hover:text-blue-300 transition-colors"> Back to Login</Link>
           </p>
         </div>
       </div>
