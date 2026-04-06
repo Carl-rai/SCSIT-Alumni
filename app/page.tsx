@@ -70,6 +70,7 @@ export default function AlumniHomePage() {
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/20 rounded-full blur-3xl" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+          <div className="absolute inset-x-0 top-24 mx-auto h-px max-w-4xl bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent" />
         </div>
 
         <div className="relative mx-auto max-w-5xl px-6 text-center">
@@ -92,15 +93,36 @@ export default function AlumniHomePage() {
             </>
           ) : (
             <>
-              <h1 className="text-6xl sm:text-7xl font-extrabold leading-tight mb-6">
-                Connect. Remember.<br />
-                <span className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
-                  Celebrate.
-                </span>
-              </h1>
-              <p className="text-xl text-blue-200/80 max-w-2xl mx-auto mb-10">
-                Reunite with classmates, celebrate milestones, discover opportunities, and stay part of the family forever.
-              </p>
+              <div className="mx-auto mb-8 max-w-3xl rounded-[2rem] border border-white/10 bg-white/5 px-6 py-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_30px_80px_rgba(2,13,31,0.55)] backdrop-blur-sm">
+                <div className="mb-4 flex items-center justify-center gap-3">
+                  <div className="h-px w-12 bg-gradient-to-r from-transparent to-yellow-400/70" />
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-blue-200/70">
+                    Salazar Colleges Community
+                  </span>
+                  <div className="h-px w-12 bg-gradient-to-l from-transparent to-yellow-400/70" />
+                </div>
+                <h1 className="text-5xl font-black leading-none sm:text-7xl">
+                  <span className="block text-white">SCSIT</span>
+                  <span className="mt-2 block bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
+                    Alumni
+                  </span>
+                </h1>
+                <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-blue-100/80 sm:text-xl">
+                  A living home for graduates to reconnect, spotlight achievements, open career doors, and keep the SCSIT spirit moving forward.
+                </p>
+              </div>
+              <div className="mx-auto mb-10 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
+                {[
+                  { label: "Reconnect", desc: "Find familiar faces and growing alumni circles." },
+                  { label: "Celebrate", desc: "Share milestones, reunions, and community moments." },
+                  { label: "Advance", desc: "Discover events, jobs, and alumni opportunities." },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-2xl border border-blue-700/30 bg-blue-950/35 px-4 py-4">
+                    <p className="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-yellow-400">{item.label}</p>
+                    <p className="text-sm leading-relaxed text-blue-200/80">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/registration"
                   className="flex items-center justify-center gap-2 px-8 py-4 bg-yellow-500 hover:bg-yellow-400 text-blue-950 font-bold rounded-xl transition-all shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 hover:-translate-y-0.5">

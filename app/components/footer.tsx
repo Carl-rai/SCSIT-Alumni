@@ -1,6 +1,18 @@
 "use client";
 
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
 export default function Footer() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const syncAuthState = () => setIsLoggedIn(!!localStorage.getItem("accessToken"));
+    syncAuthState();
+    window.addEventListener("storage", syncAuthState);
+    return () => window.removeEventListener("storage", syncAuthState);
+  }, []);
+
   return (
     <footer className="relative bg-blue-950 border-t border-blue-800/50 pt-12 pb-6 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -21,19 +33,27 @@ export default function Footer() {
           <div>
             <p className="text-yellow-400 font-semibold mb-4">Quick Links</p>
             <ul className="space-y-2 text-sm text-blue-300">
-              <li><a href="/" className="hover:text-yellow-400 transition-colors">Home</a></li>
-              <li><a href="/events" className="hover:text-yellow-400 transition-colors">Events</a></li>
-              <li><a href="/career" className="hover:text-yellow-400 transition-colors">Career</a></li>
-              <li><a href="/directory" className="hover:text-yellow-400 transition-colors">Directory</a></li>
-              <li><a href="/about" className="hover:text-yellow-400 transition-colors">About Us</a></li>
+              <li><Link href="/" className="hover:text-yellow-400 transition-colors">Home</Link></li>
+              <li><Link href="/events" className="hover:text-yellow-400 transition-colors">Events</Link></li>
+              <li><Link href="/career" className="hover:text-yellow-400 transition-colors">Career</Link></li>
+              <li><Link href="/directory" className="hover:text-yellow-400 transition-colors">Directory</Link></li>
+              <li><Link href="/about" className="hover:text-yellow-400 transition-colors">About Us</Link></li>
             </ul>
           </div>
           <div>
             <p className="text-yellow-400 font-semibold mb-4">Account</p>
             <ul className="space-y-2 text-sm text-blue-300">
-              <li><a href="/login" className="hover:text-yellow-400 transition-colors">Sign In</a></li>
-              <li><a href="/registration" className="hover:text-yellow-400 transition-colors">Register</a></li>
-              <li><a href="/profile" className="hover:text-yellow-400 transition-colors">My Profile</a></li>
+              {isLoggedIn ? (
+                <>
+                  <li><Link href="/profile" className="hover:text-yellow-400 transition-colors">My Profile</Link></li>
+                  <li><Link href="/report" className="hover:text-yellow-400 transition-colors">Report</Link></li>
+                </>
+              ) : (
+                <>
+                  <li><Link href="/login" className="hover:text-yellow-400 transition-colors">Sign In</Link></li>
+                  <li><Link href="/registration" className="hover:text-yellow-400 transition-colors">Register</Link></li>
+                </>
+              )}
             </ul>
           </div>
         </div>
