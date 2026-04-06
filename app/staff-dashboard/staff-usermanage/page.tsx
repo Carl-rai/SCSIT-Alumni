@@ -21,11 +21,19 @@ type UserType = {
   status: string;
 };
 
+type AlumniRecordType = {
+  alumni_id: string;
+  first_name: string;
+  year_graduate: number;
+  category?: { id: number; name: string } | null;
+};
+
 export default function StaffUserManagePage() {
   const [users, setUsers] = useState<UserType[]>([]);
   const [filtered, setFiltered] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [alumniRecords, setAlumniRecords] = useState<AlumniRecordType[]>([]);
   const [rejectModal, setRejectModal] = useState<{ show: boolean; userId: number | null }>({ show: false, userId: null });
   const [rejectReason, setRejectReason] = useState("");
   const router = useRouter();
@@ -34,6 +42,7 @@ export default function StaffUserManagePage() {
     const role = localStorage.getItem("userRole");
     if (role !== "admin" && role !== "staff") { router.push("/"); return; }
     fetchUsers();
+    fetchAlumniRecords();
   }, [router]);
 
   const fetchUsers = async () => {
@@ -44,6 +53,18 @@ export default function StaffUserManagePage() {
       setFiltered(data);
     } catch { console.error("Failed to fetch users"); }
     finally { setLoading(false); }
+  };
+
+  const fetchAlumniRecords = async () => {
+    try {
+      const res = await fetch(apiUrl("/api/alumni-students/"));
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setAlumniRecords(data);
+      }
+    } catch {
+      console.error("Failed to fetch alumni records");
+    }
   };
 
   const handleSearch = (value: string) => {
@@ -57,9 +78,22 @@ export default function StaffUserManagePage() {
     ));
   };
 
+  const normalize = (value?: string | number | null) => String(value ?? "").trim().toLowerCase();
+
+  const hasMatchingAlumniRecord = (user: UserType) =>
+    alumniRecords.some((record) =>
+      normalize(record.alumni_id) === normalize(user.alumni_id) &&
+      normalize(record.first_name) === normalize(user.first_name) &&
+      normalize(record.category?.name) === normalize(user.course) &&
+      String(record.year_graduate || "") === String(user.year_graduate || "")
+    );
+
   const canApprove = (u: UserType) => {
     if (!u.alumni_id?.trim()) return { allowed: false, reason: "Alumni ID required" };
+    if (!u.first_name?.trim()) return { allowed: false, reason: "First name required" };
+    if (!u.course?.trim()) return { allowed: false, reason: "Course required" };
     if (!u.year_graduate || u.year_graduate <= 0) return { allowed: false, reason: "Graduation year required" };
+    if (!hasMatchingAlumniRecord(u)) return { allowed: false, reason: "No matching alumni record found" };
     return { allowed: true };
   };
 

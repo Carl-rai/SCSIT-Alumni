@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AdminSidebar from "@/app/components/admin-sidebar";
-import { Search, FileX, Edit } from "lucide-react";
+import { Search, FileX, Edit, Trash2 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 
 type UserType = {
@@ -52,6 +52,21 @@ export default function RejectedUsersPage() {
       u.email.toLowerCase().includes(value.toLowerCase()) ||
       u.course?.toLowerCase().includes(value.toLowerCase())
     ));
+  };
+
+  const handleDelete = async (userId: number) => {
+    if (!confirm("Delete this rejected user? This cannot be undone.")) return;
+    try {
+      const res = await fetch(apiUrl(`/api/users/${userId}/delete/`), { method: "DELETE" });
+      if (res.ok) {
+        alert("Rejected user deleted.");
+        fetchRejected();
+      } else {
+        alert("Failed to delete user.");
+      }
+    } catch {
+      alert("Server connection failed.");
+    }
   };
 
   return (
@@ -119,10 +134,16 @@ export default function RejectedUsersPage() {
                         <span className="px-2.5 py-1 bg-red-500/20 border border-red-500/30 text-red-400 rounded-full text-xs font-medium">rejected</span>
                       </td>
                       <td className="px-5 py-4">
-                        <button onClick={() => router.push(`/admin-dashboard/reject-edit/${user.id}`)}
-                          className="p-1.5 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-blue-300 rounded-lg transition-all" title="Edit">
-                          <Edit size={13} />
-                        </button>
+                        <div className="flex gap-1.5">
+                          <button onClick={() => router.push(`/admin-dashboard/reject-edit/${user.id}`)}
+                            className="p-1.5 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-blue-300 rounded-lg transition-all" title="Edit">
+                            <Edit size={13} />
+                          </button>
+                          <button onClick={() => handleDelete(user.id)}
+                            className="p-1.5 bg-red-600/20 hover:bg-red-600/40 border border-red-500/30 text-red-300 rounded-lg transition-all" title="Delete">
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

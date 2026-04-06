@@ -131,7 +131,7 @@ export default function EditEventPage() {
                 {currentImage && (
                   <div className="mb-3 rounded-xl overflow-hidden border border-white/10">
                     <img src={currentImage} alt="Current" className="w-full h-40 object-cover" />
-                    <p className="text-xs text-gray-500 px-3 py-2">Current image â€” upload new to replace</p>
+                    <p className="text-xs text-gray-500 px-3 py-2">Current image - upload new to replace</p>
                   </div>
                 )}
                 <input type="file" accept=".jpg,.jpeg,.png,.gif,.webp,.svg,.bmp" onChange={(e) => setForm(p => ({ ...p, image: e.target.files?.[0] || null }))} className={inputCls} />

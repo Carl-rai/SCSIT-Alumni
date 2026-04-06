@@ -152,7 +152,7 @@ export default function StaffProfilePage() {
               <div className="flex items-center gap-2 mb-3">
                 <ShieldCheck size={15} className={passwordChanged ? "text-gray-500" : "text-yellow-400"} />
                 <span className="text-sm text-gray-400">
-                  {passwordChanged ? "Password has been changed once â€” contact admin for further changes." : "You can change your password once."}
+                  {passwordChanged ? "Password has been changed once - contact admin for further changes." : "You can change your password once."}
                 </span>
               </div>
               <button

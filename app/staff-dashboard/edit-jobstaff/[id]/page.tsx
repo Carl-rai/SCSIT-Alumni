@@ -172,7 +172,7 @@ export default function EditJobStaffPage() {
           onClick={() => router.push("/staff-dashboard/view-jobstaff")}
           className="mb-6 bg-blue-900/60 hover:bg-yellow-400 hover:text-blue-950 text-white px-4 py-2 rounded-lg font-semibold transition-all"
         >
-          â† Back
+          ← Back
         </button>
 
         <div className="bg-blue-900/40 backdrop-blur-lg border border-blue-700/40 rounded-2xl p-10">

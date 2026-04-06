@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "../components/header";
 import { useRouter } from "next/navigation";
 import { CheckCircle, XCircle, Loader, Mail, ShieldCheck, Eye, EyeOff } from "lucide-react";
@@ -9,6 +9,8 @@ import { sendBackendEmailFromResponse } from "@/lib/send-backend-email";
 
 export default function Page() {
   const router = useRouter();
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   const [form, setForm] = useState({
     email: "",
@@ -42,6 +44,24 @@ export default function Page() {
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(apiUrl("/api/categories/"));
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setCategories(data);
+        }
+      } catch {
+        console.error("Failed to fetch categories");
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -321,7 +341,14 @@ export default function Page() {
             </select>
 
             <input name="age" type="number" placeholder="Age" value={form.age} onChange={handleChange} className="input" required />
-            <input name="course" placeholder="Course" value={form.course} onChange={handleChange} className="input" required />
+            <select name="course" value={form.course} onChange={handleChange} className="input" required>
+              <option value="">{categoriesLoading ? "Loading courses..." : "Select Course"}</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
             <input name="year_graduate"
               
               placeholder="Year Graduated"
@@ -443,7 +470,7 @@ export default function Page() {
         onClick={() => setHasAlumniId(null)}
         className="absolute top-4 left-4 text-yellow-400 text-xl hover:text-yellow-300"
       >
-        â†
+        ←
       </button>
 
       <h3 className="text-2xl font-bold text-yellow-400 mb-4 text-center">
@@ -494,7 +521,7 @@ export default function Page() {
             <div className="relative bg-[#0a1628] border border-blue-700/50 rounded-2xl p-8 shadow-2xl">
               {/* Close */}
               <button onClick={() => setShowOtpModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors text-lg">âœ•</button>
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors text-lg">←</button>
 
               {/* Icon */}
               <div className="flex justify-center mb-5">

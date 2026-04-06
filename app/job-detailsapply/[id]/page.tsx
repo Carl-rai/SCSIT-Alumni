@@ -94,7 +94,7 @@ export default function JobDetailsApplyPage() {
           onClick={() => router.push("/career")}
           className="mb-6 bg-blue-900/60 hover:bg-yellow-400 hover:text-blue-950 text-white px-4 py-2 rounded-lg font-semibold transition-all"
         >
-          â† Back
+          ← Back
         </button>
 
         <div className="bg-blue-900/40 backdrop-blur-lg border border-blue-700/40 rounded-2xl overflow-hidden shadow-lg">
@@ -129,7 +129,7 @@ export default function JobDetailsApplyPage() {
               <p className="text-yellow-400 font-semibold text-base">Application Info</p>
               <p>Deadline: {job.application_deadline}</p>
               {job.contact_person && <p>ðŸ‘¤ Contact: {job.contact_person}</p>}
-              <p>Posted by: {job.posted_by_name || "â€”"}</p>
+              <p>Posted by: {job.posted_by_name || "-"}</p>
               <p>Date Posted: {job.date_posted}</p>
               <p>Apply to: {job.application_link_or_email}</p>
             </div>

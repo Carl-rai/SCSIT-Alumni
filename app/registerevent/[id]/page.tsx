@@ -112,7 +112,7 @@ export default function RegisterEventPage() {
         <div className="flex flex-col items-center justify-center py-32 gap-3 text-center">
           <AlertCircle size={40} className="text-red-400 opacity-60" />
           <p className="text-white font-semibold text-lg">Event not found</p>
-          <button onClick={() => router.replace("/events")} className="text-blue-400 text-sm hover:text-blue-300 transition-colors">â† Back to Events</button>
+          <button onClick={() => router.replace("/events")} className="text-blue-400 text-sm hover:text-blue-300 transition-colors">← Back to Events</button>
         </div>
       </div>
     );

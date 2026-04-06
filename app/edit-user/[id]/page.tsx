@@ -206,7 +206,7 @@ export default function EditUserPage() {
                         <td className="px-4 py-3 text-gray-400">{r.year_graduate}</td>
                         <td className="px-4 py-3">
                           <span className="px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 text-blue-300 rounded-full text-xs">
-                            {r.category?.name ?? "â€”"}
+                            {r.category?.name ?? "-"}
                           </span>
                         </td>
                       </tr>

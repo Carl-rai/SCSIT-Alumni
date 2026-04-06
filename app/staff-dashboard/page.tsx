@@ -152,7 +152,7 @@ export default function StaffDashboard() {
     { href: "/staff-dashboard/view-eventstaff", label: "Events", icon: Calendar, desc: "Manage events and activities", accent: "emerald" },
     { href: "/staff-dashboard/view-jobstaff", label: "Career & Jobs", icon: Search, desc: "Manage job postings", accent: "yellow" },
     { href: "/staff-dashboard/alumni-records", label: "Alumni Records", icon: BookOpen, desc: "Manage alumni student records", accent: "cyan" },
-    { href: "/staff-dashboard/staffreport-view", label: "Rejected Reports", icon: FileText, desc: "View rejected alumni accounts", accent: "red" },
+    { href: "/staff-dashboard/staffreport-view", label: "Reports&Inquiries", icon: FileText, desc: "View all reports and inquiries", accent: "red" },
     { href: "/staff-dashboard/staff-profile", label: "My Profile", icon: UserCircle, desc: "View and update your profile", accent: "purple" },
   ];
 
@@ -354,7 +354,7 @@ export default function StaffDashboard() {
             <div className="relative flex items-center justify-between">
               <div>
                 <p className="text-blue-400 text-sm font-medium mb-1 flex items-center gap-2">
-                  <Zap size={14} /> SCSIT Alumni â€” Staff Panel
+                  <Zap size={14} /> SCSIT Alumni - Staff Panel
                 </p>
                 <h2 className="text-2xl font-bold text-white">Welcome back, {userName}!</h2>
                 <p className="text-blue-300 text-sm mt-1">Manage alumni records, events, and job postings from here.</p>
@@ -373,10 +373,10 @@ export default function StaffDashboard() {
                   <Icon size={22} />
                 </div>
                 <div className="text-3xl font-extrabold text-white mb-1 tabular-nums">
-                  {value !== null ? value.toLocaleString() : <span className="text-gray-600">â€”</span>}
+                  {value !== null ? value.toLocaleString() : <span className="text-gray-600">—</span>}
                 </div>
                 <div className="text-sm text-blue-300">{label}</div>
-                <div className="absolute bottom-3 right-4 text-xs text-white/20 font-medium">â†’</div>
+                <div className="absolute bottom-3 right-4 text-xs text-white/20 font-medium">→</div>
               </Link>
             ))}
           </div>

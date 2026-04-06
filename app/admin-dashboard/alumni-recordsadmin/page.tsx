@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AdminSidebar from "@/app/components/admin-sidebar";
-import { Search, Database, Plus, Edit, Trash2 } from "lucide-react";
+import { Search, Database, Plus, Edit } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 
 type AlumniStudentType = {
@@ -50,15 +50,6 @@ export default function AlumniRecordsPage() {
       s.year_graduate.toString().includes(value) ||
       s.category?.name.toLowerCase().includes(value.toLowerCase())
     ));
-  };
-
-  const handleDelete = async (id: number) => {
-    if (!confirm("Delete this alumni record?")) return;
-    try {
-      const res = await fetch(apiUrl(`/api/alumni-students/${id}/`), { method: "DELETE" });
-      if (res.ok) { alert("Deleted!"); fetchStudents(); }
-      else alert("Failed to delete");
-    } catch { alert("Server connection failed"); }
   };
 
   return (
@@ -130,10 +121,6 @@ export default function AlumniRecordsPage() {
                           <button onClick={() => router.push(`/edit-alumni/${s.id}`)}
                             className="p-1.5 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-blue-300 rounded-lg transition-all" title="Edit">
                             <Edit size={13} />
-                          </button>
-                          <button onClick={() => handleDelete(s.id)}
-                            className="p-1.5 bg-red-600/20 hover:bg-red-600/40 border border-red-500/30 text-red-300 rounded-lg transition-all" title="Delete">
-                            <Trash2 size={13} />
                           </button>
                         </div>
                       </td>

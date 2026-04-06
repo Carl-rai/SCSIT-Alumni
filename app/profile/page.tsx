@@ -250,10 +250,10 @@ export default function ProfilePage() {
                   <p className="text-xs text-blue-500 font-bold uppercase tracking-widest mb-3">Professional & Contact</p>
                   <div className="grid md:grid-cols-2 gap-4">
                     {[
-                      { label: "Location", icon: MapPin, value: user.location || "â€”" },
-                      { label: "Contact Number", icon: Phone, value: user.contact_num || "â€”" },
-                      { label: "Current Job", icon: Briefcase, value: user.current_job || "â€”" },
-                      { label: "Company", icon: Building2, value: user.company || "â€”" },
+                      { label: "Location", icon: MapPin, value: user.location || "-" },
+                      { label: "Contact Number", icon: Phone, value: user.contact_num || "-" },
+                      { label: "Current Job", icon: Briefcase, value: user.current_job || "-" },
+                      { label: "Company", icon: Building2, value: user.company || "-" },
                     ].map(({ label, icon: Icon, value }) => (
                       <div key={label}>
                         <label className="block text-xs text-blue-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">

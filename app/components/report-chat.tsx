@@ -76,7 +76,7 @@ export default function ReportChat() {
           <div className="p-4">
             {submitted ? (
               <div className="text-center py-6">
-                <div className="text-yellow-400 text-4xl mb-3">âœ“</div>
+                <div className="text-yellow-400 text-4xl mb-3">✓</div>
                 <p className="text-white font-semibold">Report Submitted!</p>
                 <p className="text-blue-300 text-sm mt-1">Thank you for your feedback.</p>
               </div>

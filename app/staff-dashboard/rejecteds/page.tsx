@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import StaffSidebar from "@/app/components/staff-sidebar";
-import { Search, FileX } from "lucide-react";
+import { Search, FileX, Trash2 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 
 type UserType = {
@@ -54,6 +54,21 @@ export default function StaffRejectedUsersPage() {
     ));
   };
 
+  const handleDelete = async (userId: number) => {
+    if (!confirm("Delete this rejected user? This cannot be undone.")) return;
+    try {
+      const res = await fetch(apiUrl(`/api/users/${userId}/delete/`), { method: "DELETE" });
+      if (res.ok) {
+        alert("Rejected user deleted.");
+        fetchRejected();
+      } else {
+        alert("Failed to delete user.");
+      }
+    } catch {
+      alert("Server connection failed.");
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-[#020d1f] text-gray-100">
       <StaffSidebar />
@@ -94,7 +109,7 @@ export default function StaffRejectedUsersPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-white/8 bg-white/5">
-                    {["Alumni ID","Name","Email","Gender","Age","Course","Year","Status"].map(h => (
+                    {["Alumni ID","Name","Email","Gender","Age","Course","Year","Status","Action"].map(h => (
                       <th key={h} className="px-5 py-4 text-left text-xs font-semibold text-yellow-400 uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
@@ -115,6 +130,12 @@ export default function StaffRejectedUsersPage() {
                       </td>
                       <td className="px-5 py-4">
                         <span className="px-2.5 py-1 bg-red-500/20 border border-red-500/30 text-red-400 rounded-full text-xs font-medium">rejected</span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <button onClick={() => handleDelete(user.id)}
+                          className="p-1.5 bg-red-600/20 hover:bg-red-600/40 border border-red-500/30 text-red-300 rounded-lg transition-all" title="Delete">
+                          <Trash2 size={13} />
+                        </button>
                       </td>
                     </tr>
                   ))}

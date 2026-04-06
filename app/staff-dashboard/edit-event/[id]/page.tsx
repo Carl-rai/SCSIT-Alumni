@@ -142,7 +142,7 @@ export default function EditEventPage() {
           onClick={() => router.back()}
           className="mb-6 px-4 py-2 bg-blue-900/60 hover:bg-yellow-400 hover:text-blue-950 rounded-lg transition-colors"
         >
-          â† Back
+          ← Back
         </button>
 
         <form onSubmit={handleSubmit} className="bg-blue-900/40 backdrop-blur-lg border border-blue-700/40 rounded-2xl p-8 space-y-6">

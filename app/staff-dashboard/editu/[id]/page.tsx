@@ -307,7 +307,7 @@ export default function EditUserPage() {
                             <td className="px-3 py-2.5 text-yellow-400 font-mono text-xs">{r.alumni_id}</td>
                             <td className="px-3 py-2.5 text-gray-200 text-xs">{r.first_name} {r.middle_name} {r.last_name}</td>
                             <td className="px-3 py-2.5 text-blue-300 text-xs">{r.year_graduate}</td>
-                            <td className="px-3 py-2.5 text-blue-300 text-xs">{r.category?.name ?? <span className="text-gray-600 italic">â€”</span>}</td>
+                            <td className="px-3 py-2.5 text-blue-300 text-xs">{r.category?.name ?? <span className="text-gray-600 italic">-</span>}</td>
                           </tr>
                         ))}
                       </tbody>

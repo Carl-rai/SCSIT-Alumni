@@ -7,6 +7,7 @@ import { LogOut } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import LogoutConfirmModal from "@/app/components/logout-confirm-modal";
 import { useToast } from "@/app/components/toast-provider";
+import { sendBackendEmailFromResponse } from "@/lib/send-backend-email";
 
 type UserForm = {
   alumni_id: string;
@@ -106,6 +107,14 @@ export default function RejectEditPage() {
       alert("Alumni ID is required to approve.");
       return;
     }
+    if (!form.first_name.trim()) {
+      alert("First Name is required to approve.");
+      return;
+    }
+    if (!form.course.trim()) {
+      alert("Course is required to approve.");
+      return;
+    }
     if (!form.year_graduate.trim()) {
       alert("Year Graduated is required to approve.");
       return;
@@ -132,11 +141,13 @@ export default function RejectEditPage() {
       const approveRes = await fetch(apiUrl(`/api/users/${id}/approve/`), {
         method: "POST",
       });
+      const approveData = await approveRes.json();
       if (approveRes.ok) {
+        await sendBackendEmailFromResponse(approveData);
         alert("User approved successfully!");
         router.push("/admin-dashboard/rejected");
       } else {
-        alert("Failed to approve user.");
+        alert(approveData.error || "Failed to approve user.");
       }
     } catch {
       alert("Server connection failed.");
@@ -188,7 +199,7 @@ export default function RejectEditPage() {
           onClick={() => router.push("/admin-dashboard/rejected")}
           className="mb-6 px-4 py-2 bg-blue-900/60 hover:bg-yellow-400 hover:text-blue-950 rounded-lg transition-colors"
         >
-          â† Back to Rejected
+          ← Back to Rejected
         </button>
 
         <h1 className="text-4xl font-bold mb-8">

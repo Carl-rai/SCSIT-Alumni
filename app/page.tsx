@@ -310,19 +310,19 @@ export default function AlumniHomePage() {
             <div className="mx-auto max-w-5xl px-6 grid grid-cols-3 gap-8 text-center">
               <div className="group">
                 <div className="text-5xl font-extrabold text-yellow-400 mb-2 group-hover:scale-110 transition-transform">
-                  {alumniCount !== null ? alumniCount.toLocaleString() : "â€”"}
+                  {alumniCount !== null ? alumniCount.toLocaleString() : "-"}
                 </div>
                 <div className="text-blue-300 font-medium">Registered Alumni</div>
               </div>
               <div className="group">
                 <div className="text-5xl font-extrabold text-yellow-400 mb-2 group-hover:scale-110 transition-transform">
-                  {eventsCount !== null ? eventsCount.toLocaleString() : "â€”"}
+                  {eventsCount !== null ? eventsCount.toLocaleString() : "-"}
                 </div>
                 <div className="text-blue-300 font-medium">Events Hosted</div>
               </div>
               <div className="group">
                 <div className="text-5xl font-extrabold text-yellow-400 mb-2 group-hover:scale-110 transition-transform">
-                  {jobsCount !== null ? jobsCount.toLocaleString() : "â€”"}
+                  {jobsCount !== null ? jobsCount.toLocaleString() : "-"}
                 </div>
                 <div className="text-blue-300 font-medium">Open Job Listings</div>
               </div>

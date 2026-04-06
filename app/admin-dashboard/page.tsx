@@ -377,10 +377,10 @@ export default function AdminDashboard() {
                   <Icon size={22} />
                 </div>
                 <div className="text-3xl font-extrabold text-white mb-1 tabular-nums">
-                  {value !== null ? value.toLocaleString() : <span className="text-gray-600">â€”</span>}
+                  {value !== null ? value.toLocaleString() : <span className="text-gray-600">—</span>}
                 </div>
                 <div className="text-sm text-blue-300">{label}</div>
-                <div className="absolute bottom-3 right-4 text-xs text-white/20 font-medium">â†’</div>
+                <div className="absolute bottom-3 right-4 text-xs text-white/20 font-medium">→</div>
               </Link>
             ))}
           </div>
