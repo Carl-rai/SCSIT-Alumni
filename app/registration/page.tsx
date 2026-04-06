@@ -5,6 +5,7 @@ import Header from "../components/header";
 import { useRouter } from "next/navigation";
 import { CheckCircle, XCircle, Loader, Mail, ShieldCheck, Eye, EyeOff } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { sendBackendEmailFromResponse } from "@/lib/send-backend-email";
 
 export default function Page() {
   const router = useRouter();
@@ -99,13 +100,14 @@ export default function Page() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email }),
       });
+      const data = await res.json();
       if (res.ok) {
+        await sendBackendEmailFromResponse(data);
         setOtpSent(true);
         setOtpDigits(["", "", "", "", "", ""]);
         setShowOtpModal(true);
         startResendTimer();
       } else {
-        const data = await res.json();
         setOtpError(data.error || "Failed to send code.");
       }
     } catch {

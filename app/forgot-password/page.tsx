@@ -6,6 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 import { Mail, KeyRound, Lock, ShieldCheck, ArrowRight, RotateCcw } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { sendBackendEmailFromResponse } from "@/lib/send-backend-email";
 
 const steps = [
   { icon: Mail, label: "Email", desc: "Enter your email" },
@@ -26,7 +27,8 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(apiUrl("/api/forgot-password/"), { email });
+      const { data } = await axios.post(apiUrl("/api/forgot-password/"), { email });
+      await sendBackendEmailFromResponse(data);
       alert("Verification code sent to your email!");
       setStep(2);
     } catch (error: any) {
@@ -218,4 +220,3 @@ export default function ForgotPasswordPage() {
     </div>
   );
 }
-

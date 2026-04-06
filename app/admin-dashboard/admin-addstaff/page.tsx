@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import AdminSidebar from "@/app/components/admin-sidebar";
 import { UserPlus } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { sendBackendEmailFromResponse } from "@/lib/send-backend-email";
 
 export default function AdminAddStaffPage() {
   const router = useRouter();
@@ -29,8 +30,14 @@ export default function AdminAddStaffPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (res.ok) { alert("Staff account created! Email notification sent."); router.push("/admin-dashboard/staff-manage"); }
-      else { const d = await res.json(); alert("Error: " + JSON.stringify(d)); }
+      const data = await res.json();
+      if (res.ok) {
+        await sendBackendEmailFromResponse(data);
+        alert("Staff account created! Email notification sent.");
+        router.push("/admin-dashboard/staff-manage");
+      } else {
+        alert("Error: " + JSON.stringify(data));
+      }
     } catch { alert("Server connection failed"); }
   };
 

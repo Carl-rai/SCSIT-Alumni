@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Navbar from "../../components/navbar";
 import { MapPin, CalendarDays, Clock, Users, BookOpen, Ticket, ArrowLeft, CheckCircle, AlertCircle, Sparkles } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { sendBackendEmailFromResponse } from "@/lib/send-backend-email";
 
 export default function RegisterEventPage() {
   const params = useParams();
@@ -70,12 +71,13 @@ export default function RegisterEventPage() {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ event: params.id, guest_count: guestCount, remarks }),
       });
+      const data = await res.json();
       if (res.ok) {
+        await sendBackendEmailFromResponse(data);
         alert("Successfully registered for the event!");
         router.push("/events");
       } else {
-        const error = await res.json();
-        alert(error.detail || "Registration failed. You may already be registered.");
+        alert(data.detail || "Registration failed. You may already be registered.");
       }
     } catch {
       alert("Server connection failed");

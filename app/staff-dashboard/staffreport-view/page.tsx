@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FileText, Search, Eye, X, Mail, User, Clock, Send, CheckCircle } from "lucide-react";
 import StaffSidebar from "../../components/staff-sidebar";
 import { apiUrl } from "@/lib/api";
+import { sendBackendEmailFromResponse } from "@/lib/send-backend-email";
 
 type ReportType = {
   id: number;
@@ -71,7 +72,9 @@ export default function StaffReportsView() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reply: replyText }),
       });
+      const data = await res.json();
       if (res.ok) {
+        await sendBackendEmailFromResponse(data);
         await fetchReports();
         setSelected(prev => prev ? { ...prev, reply: replyText, has_reply: true, is_read_by_user: false } : null);
       }

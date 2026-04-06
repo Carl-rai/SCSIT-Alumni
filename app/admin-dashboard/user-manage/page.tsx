@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import AdminSidebar from "@/app/components/admin-sidebar";
 import { Search, Users, FileX, Database, CheckCircle, XCircle, Trash2, Edit } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { sendBackendEmailFromResponse } from "@/lib/send-backend-email";
 
 type UserType = {
   id: number;
@@ -71,8 +72,12 @@ export default function UserManagePage() {
     if (!confirm("Approve this user?")) return;
     try {
       const res = await fetch(apiUrl(`/api/users/${userId}/approve/`), { method: "POST" });
-      if (res.ok) { alert("User approved!"); fetchUsers(); }
-      else alert("Failed to approve user");
+      const data = await res.json();
+      if (res.ok) {
+        await sendBackendEmailFromResponse(data);
+        alert("User approved!");
+        fetchUsers();
+      } else alert(data.error || "Failed to approve user");
     } catch { alert("Server connection failed"); }
   };
 
@@ -84,8 +89,13 @@ export default function UserManagePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reason: rejectReason }),
       });
-      if (res.ok) { alert("User rejected!"); setRejectModal({ show: false, userId: null }); fetchUsers(); }
-      else alert("Failed to reject user");
+      const data = await res.json();
+      if (res.ok) {
+        await sendBackendEmailFromResponse(data);
+        alert("User rejected!");
+        setRejectModal({ show: false, userId: null });
+        fetchUsers();
+      } else alert(data.error || "Failed to reject user");
     } catch { alert("Server connection failed"); }
   };
 
