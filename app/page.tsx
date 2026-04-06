@@ -93,45 +93,96 @@ export default function AlumniHomePage() {
             </>
           ) : (
             <>
-              <div className="mx-auto mb-8 max-w-3xl rounded-[2rem] border border-white/10 bg-white/5 px-6 py-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_30px_80px_rgba(2,13,31,0.55)] backdrop-blur-sm">
-                <div className="mb-4 flex items-center justify-center gap-3">
-                  <div className="h-px w-12 bg-gradient-to-r from-transparent to-yellow-400/70" />
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-blue-200/70">
-                    Salazar Colleges Community
-                  </span>
-                  <div className="h-px w-12 bg-gradient-to-l from-transparent to-yellow-400/70" />
-                </div>
-                <h1 className="text-5xl font-black leading-none sm:text-7xl">
-                  <span className="block text-white">SCSIT</span>
-                  <span className="mt-2 block bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
-                    Alumni
-                  </span>
-                </h1>
-                <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-blue-100/80 sm:text-xl">
-                  A living home for graduates to reconnect, spotlight achievements, open career doors, and keep the SCSIT spirit moving forward.
-                </p>
-              </div>
-              <div className="mx-auto mb-10 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
-                {[
-                  { label: "Reconnect", desc: "Find familiar faces and growing alumni circles." },
-                  { label: "Celebrate", desc: "Share milestones, reunions, and community moments." },
-                  { label: "Advance", desc: "Discover events, jobs, and alumni opportunities." },
-                ].map((item) => (
-                  <div key={item.label} className="rounded-2xl border border-blue-700/30 bg-blue-950/35 px-4 py-4">
-                    <p className="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-yellow-400">{item.label}</p>
-                    <p className="text-sm leading-relaxed text-blue-200/80">{item.desc}</p>
+              <div className="mx-auto grid max-w-6xl items-center gap-8 text-left lg:grid-cols-[1.1fr_0.9fr]">
+                <div className="rounded-[2rem] border border-white/10 bg-white/5 px-7 py-8 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_30px_80px_rgba(2,13,31,0.55)] backdrop-blur-sm">
+                  <div className="mb-5 flex items-center gap-3">
+                    <div className="h-px w-12 bg-gradient-to-r from-transparent to-yellow-400/70" />
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-blue-200/70">
+                      Main Alumni System
+                    </span>
                   </div>
-                ))}
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/registration"
-                  className="flex items-center justify-center gap-2 px-8 py-4 bg-yellow-500 hover:bg-yellow-400 text-blue-950 font-bold rounded-xl transition-all shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 hover:-translate-y-0.5">
-                  Get Started <ArrowRight size={18} />
-                </Link>
-                <Link href="/events"
-                  className="flex items-center justify-center gap-2 px-8 py-4 border border-blue-600/60 hover:border-yellow-500/50 text-blue-200 hover:text-yellow-300 rounded-xl transition-all hover:-translate-y-0.5">
-                  Explore Events
-                </Link>
+                  <h1 className="text-5xl font-black leading-none sm:text-7xl">
+                    <span className="block text-white">SCSIT</span>
+                    <span className="mt-2 block bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
+                      Alumni
+                    </span>
+                  </h1>
+                  <p className="mt-6 max-w-2xl text-lg leading-relaxed text-blue-100/80 sm:text-xl">
+                    The central digital home for graduates to reconnect with the community, explore opportunities, and stay informed about everything happening across the alumni network.
+                  </p>
+                  <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                    {[
+                      { label: "Reconnect", desc: "Build your alumni circle again." },
+                      { label: "Discover", desc: "Track events, jobs, and updates." },
+                      { label: "Belong", desc: "Stay part of the SCSIT story." },
+                    ].map((item) => (
+                      <div key={item.label} className="rounded-2xl border border-blue-700/30 bg-blue-950/35 px-4 py-4">
+                        <p className="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-yellow-400">{item.label}</p>
+                        <p className="text-sm leading-relaxed text-blue-200/80">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+                    <Link href="/registration"
+                      className="flex items-center justify-center gap-2 px-8 py-4 bg-yellow-500 hover:bg-yellow-400 text-blue-950 font-bold rounded-xl transition-all shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 hover:-translate-y-0.5">
+                      Get Started <ArrowRight size={18} />
+                    </Link>
+                    <Link href="/events"
+                      className="flex items-center justify-center gap-2 px-8 py-4 border border-blue-600/60 hover:border-yellow-500/50 text-blue-200 hover:text-yellow-300 rounded-xl transition-all hover:-translate-y-0.5">
+                      Explore Events
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="relative overflow-hidden rounded-[2rem] border border-blue-700/30 bg-gradient-to-br from-blue-900/50 via-[#0b1730] to-[#050d1d] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+                  <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-yellow-400/10 to-transparent" />
+                  <div className="relative">
+                    <div className="mb-5 flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-yellow-400">System Overview</p>
+                        <h2 className="mt-2 text-2xl font-bold text-white">What users can analyze here</h2>
+                      </div>
+                      <div className="rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-3">
+                        <GraduationCap className="h-6 w-6 text-yellow-400" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      {[
+                        { icon: Users, title: "Community Insights", desc: "Review alumni presence, reconnect with batches, and browse the growing network." },
+                        { icon: Calendar, title: "Event Activity", desc: "See upcoming reunions, programs, and campus-related alumni gatherings." },
+                        { icon: Briefcase, title: "Career Opportunities", desc: "Analyze openings, discover employer posts, and follow practical career pathways." },
+                      ].map(({ icon: Icon, title, desc }) => (
+                        <div key={title} className="rounded-2xl border border-white/8 bg-white/5 p-4 text-left">
+                          <div className="flex items-start gap-4">
+                            <div className="rounded-xl border border-blue-500/25 bg-blue-500/10 p-3">
+                              <Icon className="h-5 w-5 text-blue-200" />
+                            </div>
+                            <div>
+                              <p className="text-base font-semibold text-white">{title}</p>
+                              <p className="mt-1 text-sm leading-relaxed text-blue-200/75">{desc}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-5 grid grid-cols-3 gap-3">
+                      <div className="rounded-2xl border border-blue-700/30 bg-blue-950/45 px-4 py-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-blue-300/70">Alumni</p>
+                        <p className="mt-2 text-2xl font-extrabold text-white">{alumniCount !== null ? alumniCount.toLocaleString() : "--"}</p>
+                      </div>
+                      <div className="rounded-2xl border border-blue-700/30 bg-blue-950/45 px-4 py-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-blue-300/70">Events</p>
+                        <p className="mt-2 text-2xl font-extrabold text-white">{eventsCount !== null ? eventsCount.toLocaleString() : "--"}</p>
+                      </div>
+                      <div className="rounded-2xl border border-blue-700/30 bg-blue-950/45 px-4 py-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-blue-300/70">Jobs</p>
+                        <p className="mt-2 text-2xl font-extrabold text-white">{jobsCount !== null ? jobsCount.toLocaleString() : "--"}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </>
           )}
