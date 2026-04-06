@@ -8,10 +8,11 @@ type EmailPayload = {
 type EmailResponseLike = {
   email_delivery_mode?: string;
   email_payload?: EmailPayload;
+  email_sent_by_backend?: boolean;
 };
 
 export async function sendBackendEmailFromResponse(data?: EmailResponseLike | null) {
-  if (!data?.email_payload || data.email_delivery_mode !== "frontend") {
+  if (!data?.email_payload || data.email_sent_by_backend === true) {
     return false;
   }
 
