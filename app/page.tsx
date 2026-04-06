@@ -93,7 +93,7 @@ export default function AlumniHomePage() {
             </>
           ) : (
             <>
-              <div className="mx-auto max-w-6xl rounded-[2rem] border border-white/10 bg-white/5 px-7 py-8 text-left shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_30px_80px_rgba(2,13,31,0.55)] backdrop-blur-sm">
+              <div className="mx-auto max-w-6xl px-2 text-left">
                 <div className="mb-5 flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-transparent to-yellow-400/70" />
                   <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-blue-200/70">
@@ -122,7 +122,7 @@ export default function AlumniHomePage() {
                         { label: "Discover", desc: "Track events, jobs, and updates." },
                         { label: "Belong", desc: "Stay part of the SCSIT story." },
                       ].map((item) => (
-                        <div key={item.label} className="rounded-2xl border border-blue-700/30 bg-blue-950/35 px-5 py-4">
+                        <div key={item.label} className="px-1 py-1">
                           <p className="text-base font-bold uppercase tracking-[0.2em] text-yellow-400">{item.label}</p>
                           <p className="mt-2 text-sm leading-relaxed text-blue-200/80 sm:text-base">{item.desc}</p>
                         </div>
