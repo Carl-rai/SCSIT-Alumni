@@ -163,7 +163,7 @@ export default function DirectoryPage() {
                     <div key={year}>
                       <div className="flex items-center gap-2 mb-3 ml-2">
                         <span className="text-xs font-semibold text-blue-400 uppercase tracking-widest">Batch {year}</span>
-                        <span className="text-blue-700 text-xs">Â· {members.length} alumni</span>
+                        <span className="text-blue-700 text-xs"> - {members.length} alumni</span>
                       </div>
 
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">

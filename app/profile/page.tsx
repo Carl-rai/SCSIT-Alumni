@@ -182,7 +182,7 @@ export default function ProfilePage() {
                 
                 <p className="text-blue-400 text-sm">{user.email}</p>
                 <span className="inline-block mt-1 px-3 py-0.5 bg-yellow-500/15 border border-yellow-500/30 text-yellow-400 text-xs rounded-full font-medium">
-                  Alumni Â· {user.course}
+                  Alumni - {user.course}
                 </span>
               </div>
 

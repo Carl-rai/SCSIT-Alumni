@@ -287,7 +287,7 @@ export default function Navbar() {
                                 <div className="min-w-0 flex-1">
                                   <p className="text-orange-300 text-xs font-semibold">Tomorrow's Event!</p>
                                   <p className="text-white text-xs font-medium truncate">{r.title}</p>
-                                  <p className="text-blue-400 text-[11px]">{r.start_time} Â· {r.location}</p>
+                                  <p className="text-blue-400 text-[11px]">{r.start_time} - {r.location}</p>
                                 </div>
                                 <button onClick={(e) => deleteNotif(key, e)} className="opacity-0 group-hover/item:opacity-100 p-1 hover:bg-red-500/20 rounded-lg transition-all shrink-0">
                                   <X size={11} className="text-red-400" />
@@ -318,7 +318,7 @@ export default function Navbar() {
                                 </div>
                                 <div className="min-w-0 flex-1">
                                   <p className="text-white text-xs font-medium truncate">{ev.title}</p>
-                                  <p className="text-blue-400 text-[11px]">{ev.date ? new Date(ev.date).toLocaleDateString() : ""} Â· {ev.location}</p>
+                                  <p className="text-blue-400 text-[11px]">{ev.date ? new Date(ev.date).toLocaleDateString() : ""} - {ev.location}</p>
                                 </div>
                                 <button onClick={(e) => deleteNotif(key, e)} className="opacity-0 group-hover/item:opacity-100 p-1 hover:bg-red-500/20 rounded-lg transition-all shrink-0">
                                   <X size={11} className="text-red-400" />
@@ -349,7 +349,7 @@ export default function Navbar() {
                                 </div>
                                 <div className="min-w-0 flex-1">
                                   <p className="text-white text-xs font-medium truncate">{j.job_title}</p>
-                                  <p className="text-blue-400 text-[11px] truncate">{j.company_name} Â· {j.employment_type?.replace("_", " ")}</p>
+                                  <p className="text-blue-400 text-[11px] truncate">{j.company_name} - {j.employment_type?.replace("_", " ")}</p>
                                 </div>
                                 <button onClick={(e) => deleteNotif(key, e)} className="opacity-0 group-hover/item:opacity-100 p-1 hover:bg-red-500/20 rounded-lg transition-all shrink-0">
                                   <X size={11} className="text-red-400" />

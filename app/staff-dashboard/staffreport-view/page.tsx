@@ -252,7 +252,7 @@ export default function StaffReportsView() {
             {selected.reply && (
               <div className="bg-emerald-900/20 border border-emerald-500/20 rounded-xl p-4 mb-4">
                 <p className="text-xs text-emerald-400 mb-2 font-semibold uppercase tracking-wider flex items-center gap-1">
-                  <CheckCircle size={11} /> Previous Reply Â· {selected.replied_at ? new Date(selected.replied_at).toLocaleString() : ''}
+                  <CheckCircle size={11} /> Previous Reply - {selected.replied_at ? new Date(selected.replied_at).toLocaleString() : ''}
                 </p>
                 <p className="text-emerald-200 leading-relaxed text-sm">{selected.reply}</p>
                 {selected.is_registered_user && (
