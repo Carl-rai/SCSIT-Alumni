@@ -103,7 +103,7 @@ export default function CareerPage() {
                       Open
                     </span>
                   </div>
-                  <p className="text-blue-200 font-semibold">ðŸ¢ {job.company_name}</p>
+                  <p className="text-blue-200 font-semibold"> {job.company_name}</p>
                   <p className="text-gray-300 text-sm line-clamp-3">{job.job_description}</p>
                   <button
                     onClick={() => handleViewDetails(job.id)}

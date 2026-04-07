@@ -132,7 +132,7 @@ export default function ViewEventAdminPage() {
                       <CalendarDays size={13} className="text-yellow-400/60" /> {event.date}
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-400">
-                      <Clock size={13} className="text-blue-400/60" /> {fmtTime(event.start_time)} â€“ {fmtTime(event.end_time)}
+                      <Clock size={13} className="text-blue-400/60" /> {fmtTime(event.start_time)} - {fmtTime(event.end_time)}
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-400">
                       <MapPin size={13} className="text-red-400/60" /> {event.location}
