@@ -268,13 +268,13 @@ export default function ProfilePage() {
                       <label className="block text-xs text-blue-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                         <Wrench size={10} /> Skills
                       </label>
-                      <div className="px-4 py-3 bg-blue-900/40 border border-blue-700/30 rounded-xl text-sm text-gray-200 min-h-[60px] whitespace-pre-wrap">{user.skills || "â€”"}</div>
+                      <div className="px-4 py-3 bg-blue-900/40 border border-blue-700/30 rounded-xl text-sm text-gray-200 min-h-[60px] whitespace-pre-wrap">{user.skills || "-"}</div>
                     </div>
                     <div>
                       <label className="block text-xs text-blue-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                         <FileText size={10} /> Bio
                       </label>
-                      <div className="px-4 py-3 bg-blue-900/40 border border-blue-700/30 rounded-xl text-sm text-gray-200 min-h-[60px] whitespace-pre-wrap">{user.bio || "â€”"}</div>
+                      <div className="px-4 py-3 bg-blue-900/40 border border-blue-700/30 rounded-xl text-sm text-gray-200 min-h-[60px] whitespace-pre-wrap">{user.bio || "-"}</div>
                     </div>
                   </div>
                 </section>

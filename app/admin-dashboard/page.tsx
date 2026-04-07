@@ -358,7 +358,7 @@ export default function AdminDashboard() {
             <div className="relative flex items-center justify-between">
               <div>
                 <p className="text-yellow-400 text-sm font-medium mb-1 flex items-center gap-2">
-                  <Zap size={14} /> SCSIT Alumni â€” Admin Control Panel
+                  <Zap size={14} /> SCSIT Alumni - Admin Control Panel
                 </p>
                 <h2 className="text-2xl font-bold text-white">Welcome back, {userName}!</h2>
                 <p className="text-blue-300 text-sm mt-1">You have full control over the alumni management system.</p>

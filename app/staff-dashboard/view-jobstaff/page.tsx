@@ -119,7 +119,7 @@ export default function ViewJobStaffPage() {
                     <img src={job.image} alt={job.job_title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#020d1f] to-transparent" />
                     <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-bold ${job.status === "open" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}>
-                      {job.status === "open" ? "â— Open" : "â— Closed"}
+                      {job.status === "open" ? " Open" : " Closed"}
                     </span>
                   </div>
                 )}
@@ -128,7 +128,7 @@ export default function ViewJobStaffPage() {
                     <h2 className="text-lg font-bold text-yellow-400">{job.job_title}</h2>
                     {!job.image && (
                       <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${job.status === "open" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}>
-                        {job.status === "open" ? "â— Open" : "â— Closed"}
+                        {job.status === "open" ? " Open" : " Closed"}
                       </span>
                     )}
                   </div>
