@@ -286,7 +286,7 @@ export default function AdminReportsView() {
                   </p>
                 )}
                 {!selected.is_registered_user && (
-                  <p className="text-xs mt-2 text-blue-400">ðŸ“§ Sent to {selected.email}</p>
+                  <p className="text-xs mt-2 text-blue-400"> Sent to {selected.email}</p>
                 )}
               </div>
             )}
