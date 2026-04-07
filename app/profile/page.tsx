@@ -196,7 +196,7 @@ export default function ProfilePage() {
                       : "bg-green-500/20 border-green-500/40 text-green-400 hover:bg-green-500/30"
                   }`}
                 >
-                  {isPrivate ? "ðŸ”’ Private" : "ðŸŒ Public"}
+                  {isPrivate ? " Private" : " Public"}
                 </button>
                 {!isEditing ? (
                   <button onClick={() => setIsEditing(true)}
@@ -218,7 +218,7 @@ export default function ProfilePage() {
                 {isPrivate && (
                   <div className="flex items-center gap-3 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-xl">
                     <span className="text-red-400 text-sm font-medium">
-                      ðŸ”’ You set your profile to <strong>Private</strong>. Alumni cannot see your information Details.
+                       You set your profile to <strong>Private</strong>. Alumni cannot see your information Details.
                     </span>
                   </div>
                 )}
