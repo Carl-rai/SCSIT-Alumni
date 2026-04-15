@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 export default function AuditFetchProvider() {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const originalFetch = window.fetch.bind(window);
 
     window.fetch = async (input: RequestInfo | URL, init: RequestInit = {}) => {
