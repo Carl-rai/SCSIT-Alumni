@@ -129,8 +129,14 @@ export default function IdStaffRequestsPage() {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ status: "done" }),
       });
-      if (res.ok) fetchRequests();
-      else alert("Failed to update status.");
+      if (res.ok) {
+        // find the request and send the ready email
+        const req = requests.find((r) => r.id === id);
+        if (req) {
+          sendBackendEmailPayload(buildIdRequestReadyEmailPayload(req)).catch(() => {});
+        }
+        fetchRequests();
+      } else alert("Failed to update status.");
     } catch { alert("Server connection failed."); }
     finally { setMarkingDone(null); }
   };
