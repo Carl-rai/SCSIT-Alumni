@@ -9,4 +9,12 @@ export function apiUrl(path: string) {
   return `${API_BASE_URL}${path}`;
 }
 
+export function proxyApiUrl(path: string) {
+  const cleanedPath = path
+    .replace(/^\/api\//, "")
+    .replace(/^\/+/, "");
+
+  return `/api/backend/${cleanedPath}`;
+}
+
 export { API_BASE_URL };

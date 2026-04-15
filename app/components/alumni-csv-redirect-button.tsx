@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FileSpreadsheet, LoaderCircle } from "lucide-react";
-import { apiUrl } from "@/lib/api";
+import { proxyApiUrl } from "@/lib/api";
 
 type AlumniCsvRedirectButtonProps = {
   className?: string;
@@ -20,7 +20,7 @@ export default function AlumniCsvRedirectButton({
 
     setLoading(true);
     try {
-      const res = await fetch(apiUrl("/api/alumni-csv-uploads/"));
+      const res = await fetch(proxyApiUrl("/api/alumni-csv-uploads/"));
       const data = await res.json().catch(() => []);
 
       if (!res.ok) {
