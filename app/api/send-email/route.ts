@@ -11,9 +11,7 @@ const fromName =
   process.env.MAILER_FROM_NAME || "Alumni Management System";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  service: "gmail",
   auth: {
     user: emailUser,
     pass: emailPassword,
