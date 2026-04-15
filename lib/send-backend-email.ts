@@ -1,5 +1,3 @@
-import { apiUrl } from "@/lib/api";
-
 type EmailPayload = {
   to: string;
   subject: string;
@@ -51,7 +49,7 @@ export function buildIdRequestReadyEmailPayload(source: IDRequestEmailSource): E
 export async function sendBackendEmailPayload(payload?: EmailPayload | null) {
   if (!payload) return false;
 
-  const res = await fetch(apiUrl("/api/send-email/"), {
+  const res = await fetch("/api/send-email", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
