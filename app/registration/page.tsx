@@ -429,7 +429,7 @@ export default function Page() {
         onClick={() => setShowPopup(false)}
         className="absolute top-4 left-4 text-yellow-400 text-xl hover:text-yellow-300"
       >
-        â†
+        ←
       </button>
 
       <h3 className="text-2xl font-bold text-yellow-400 mb-4 text-center">

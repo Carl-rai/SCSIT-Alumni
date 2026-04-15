@@ -3,9 +3,33 @@
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Users, Calendar, Search, Shield, FileText, BookOpen, Zap, Activity, Bell, UserPlus, CalendarCheck, X, CheckCheck, Trash2 } from "lucide-react";
+import { Users, Calendar, Search, Shield, FileText, Zap, Activity, Bell, UserPlus, CalendarCheck, X, CheckCheck, Trash2 } from "lucide-react";
 import AdminSidebar from "../components/admin-sidebar";
 import { apiUrl } from "@/lib/api";
+
+type NewUserNotif = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  created_at: string;
+};
+
+type NewEventRegNotif = {
+  id: number;
+  user__first_name: string;
+  user__last_name: string;
+  event__title: string;
+  registration_date: string;
+};
+
+type NewReportNotif = {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  created_at: string;
+};
 
 function getGreeting() {
   const h = new Date().getHours();
@@ -25,37 +49,29 @@ function saveNotifState(state: { readIds: string[]; deletedIds: string[] }) {
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [userName, setUserName] = useState("");
+  const [userName] = useState(() => (typeof window !== "undefined" ? localStorage.getItem("userName") || "Admin" : "Admin"));
   const [totalUsers, setTotalUsers] = useState<number | null>(null);
   const [totalStaff, setTotalStaff] = useState<number | null>(null);
   const [totalEvents, setTotalEvents] = useState<number | null>(null);
   const [totalJobs, setTotalJobs] = useState<number | null>(null);
   const [now, setNow] = useState(new Date());
   const [showNotif, setShowNotif] = useState(false);
-  const [newUsers, setNewUsers] = useState<any[]>([]);
-  const [newEventRegs, setNewEventRegs] = useState<any[]>([]);
-  const [newReports, setNewReports] = useState<any[]>([]);
-  const [readIds, setReadIds] = useState<Set<string>>(new Set());
-  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
+  const [newUsers, setNewUsers] = useState<NewUserNotif[]>([]);
+  const [newEventRegs, setNewEventRegs] = useState<NewEventRegNotif[]>([]);
+  const [newReports, setNewReports] = useState<NewReportNotif[]>([]);
+  const [readIds, setReadIds] = useState<Set<string>>(() => {
+    if (typeof window === "undefined") return new Set();
+    const saved = loadNotifState();
+    return new Set(saved.readIds || []);
+  });
+  const [deletedIds, setDeletedIds] = useState<Set<string>>(() => {
+    if (typeof window === "undefined") return new Set();
+    const saved = loadNotifState();
+    return new Set(saved.deletedIds || []);
+  });
   const notifRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const role = localStorage.getItem("userRole");
-    const name = localStorage.getItem("userName");
-    if (role !== "admin") { router.push("/"); return; }
-    setUserName(name || "Admin");
-    const saved = loadNotifState();
-    setReadIds(new Set(saved.readIds || []));
-    setDeletedIds(new Set(saved.deletedIds || []));
-    fetchCounts();
-    fetchNotifications();
-    const interval = setInterval(fetchCounts, 10000);
-    const notifInterval = setInterval(fetchNotifications, 30000);
-    const clock = setInterval(() => setNow(new Date()), 1000);
-    return () => { clearInterval(interval); clearInterval(notifInterval); clearInterval(clock); };
-  }, [router]);
-
-  const fetchCounts = async () => {
+  async function fetchCounts() {
     try {
       const [usersRes, staffRes, eventsRes, jobsRes] = await Promise.all([
         fetch(apiUrl("/api/users/")),
@@ -71,9 +87,9 @@ export default function AdminDashboard() {
       setTotalEvents(events.length);
       setTotalJobs(jobs.length);
     } catch {}
-  };
+  }
 
-  const fetchNotifications = async () => {
+  async function fetchNotifications() {
     try {
       const res = await fetch(apiUrl("/api/notifications/"));
       const data = await res.json();
@@ -81,7 +97,25 @@ export default function AdminDashboard() {
       setNewEventRegs(data.new_event_regs || []);
       setNewReports(data.new_reports || []);
     } catch {}
-  };
+  }
+
+  useEffect(() => {
+    const role = localStorage.getItem("userRole");
+    if (role !== "admin") { router.push("/"); return; }
+    const initTimer = window.setTimeout(() => {
+      fetchCounts();
+      fetchNotifications();
+    }, 0);
+    const interval = setInterval(fetchCounts, 10000);
+    const notifInterval = setInterval(fetchNotifications, 30000);
+    const clock = setInterval(() => setNow(new Date()), 1000);
+    return () => {
+      window.clearTimeout(initTimer);
+      clearInterval(interval);
+      clearInterval(notifInterval);
+      clearInterval(clock);
+    };
+  }, [router]);
 
   const notifKey = (type: string, id: number) => `${type}_${id}`;
 
@@ -156,8 +190,8 @@ export default function AdminDashboard() {
     { href: "/admin-dashboard/staff-manage", label: "Staff Accounts", icon: Shield, desc: "Create and manage staff accounts", accent: "purple" },
     { href: "/admin-dashboard/view-eventadmin", label: "Events", icon: Calendar, desc: "Full event management control", accent: "emerald" },
     { href: "/admin-dashboard/view-jobadmin", label: "Career & Jobs", icon: Search, desc: "Manage job postings", accent: "yellow" },
-    { href: "/admin-dashboard/alumni-recordsadmin", label: "Alumni Records", icon: BookOpen, desc: "Manage alumni student records", accent: "cyan" },
     { href: "/admin-dashboard/adminreports-view", label: "Reports & Inquiries", icon: FileText, desc: "View all reports and inquiries", accent: "red" },
+    { href: "/admin-dashboard/audit-logs", label: "Audit Logs", icon: Shield, desc: "Review logged system activity", accent: "cyan" },
   ];
 
   const accentMap: Record<string, string> = {
@@ -413,4 +447,3 @@ export default function AdminDashboard() {
     </div>
   );
 }
-

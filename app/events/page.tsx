@@ -82,7 +82,7 @@ export default function EventsPage() {
           <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500" />
           <input
             type="text"
-            placeholder="Search by title, location, or dateâ€¦"
+            placeholder="Search by title, location, or date…"
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
             className="w-full pl-11 pr-4 py-3 bg-blue-900/30 border border-blue-700/40 hover:border-blue-600/60 focus:border-yellow-500/50 focus:outline-none rounded-2xl text-white text-sm placeholder-blue-600 transition-colors"

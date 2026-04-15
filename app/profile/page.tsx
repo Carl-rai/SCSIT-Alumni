@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import { Camera, GraduationCap, Loader, Pencil, X, Check, MapPin, Phone, Briefcase, Building2, Wrench, FileText } from "lucide-react";
+import { Camera, GraduationCap, IdCard, Loader, Pencil, X, Check } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 
 export default function ProfilePage() {
@@ -19,8 +19,9 @@ export default function ProfilePage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
-  const [togglingPrivacy, setTogglingPrivacy] = useState(false);
+  const [idRequest, setIdRequest] = useState<{ status: string | null; note?: string } | null>(null);
+  const [idRequestNote, setIdRequestNote] = useState("");
+  const [submittingRequest, setSubmittingRequest] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -28,7 +29,48 @@ export default function ProfilePage() {
     const email = localStorage.getItem("userEmail");
     if (role !== "user") { router.push("/"); return; }
     fetchUserData(email);
+    fetchIdRequest();
   }, [router]);
+
+  const fetchIdRequest = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+    try {
+      const res = await fetch(apiUrl("/api/id-requests/my/"), {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) setIdRequest(await res.json());
+    } catch { /* silent */ }
+  };
+
+  const handleSubmitIdRequest = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+    setSubmittingRequest(true);
+    try {
+      const res = await fetch(apiUrl("/api/id-requests/submit/"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ note: idRequestNote }),
+      });
+      const data = await res.json();
+      if (res.ok) { alert("ID request submitted!"); fetchIdRequest(); setIdRequestNote(""); }
+      else alert(data.error || "Failed to submit request.");
+    } catch { alert("Server connection failed."); }
+    finally { setSubmittingRequest(false); }
+  };
+
+  const handleCancelIdRequest = async () => {
+    if (!confirm("Cancel your ID request?")) return;
+    const token = localStorage.getItem("accessToken");
+    try {
+      const res = await fetch(apiUrl("/api/id-requests/cancel/"), {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) { alert("Request cancelled."); fetchIdRequest(); }
+    } catch { alert("Server connection failed."); }
+  };
 
   const fetchUserData = async (email: string | null) => {
     if (!email) return;
@@ -38,7 +80,6 @@ export default function ProfilePage() {
         const data = await res.json();
         setUser(data);
         setImagePreview(data.profile_image || null);
-        setIsPrivate(data.is_private || false);
         setForm({
           first_name: data.first_name, middle_name: data.middle_name || "",
           last_name: data.last_name, gender: data.gender,
@@ -110,22 +151,6 @@ export default function ProfilePage() {
     });
   };
 
-  const handleTogglePrivacy = async () => {
-    setTogglingPrivacy(true);
-    try {
-      const res = await fetch(apiUrl("/api/toggle-privacy/"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: user.email }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setIsPrivate(data.is_private);
-      }
-    } catch { alert("Server connection failed"); }
-    finally { setTogglingPrivacy(false); }
-  };
-
   if (!user) return (
     <div className="min-h-screen bg-[#020d1f] flex items-center justify-center">
       <div className="w-8 h-8 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin" />
@@ -187,17 +212,6 @@ export default function ProfilePage() {
               </div>
 
               <div className="sm:ml-auto pb-1 flex items-center gap-3">
-                <button
-                  onClick={handleTogglePrivacy}
-                  disabled={togglingPrivacy}
-                  className={`flex items-center gap-2 px-5 py-2.5 font-bold rounded-xl transition-all border ${
-                    isPrivate
-                      ? "bg-red-500/20 border-red-500/40 text-red-400 hover:bg-red-500/30"
-                      : "bg-green-500/20 border-green-500/40 text-green-400 hover:bg-green-500/30"
-                  }`}
-                >
-                  {isPrivate ? " Private" : " Public"}
-                </button>
                 {!isEditing ? (
                   <button onClick={() => setIsEditing(true)}
                     className="flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-400 text-blue-950 font-bold rounded-xl transition-all shadow-lg shadow-yellow-500/20">
@@ -215,13 +229,6 @@ export default function ProfilePage() {
             {/* â”€â”€ VIEW MODE â”€â”€ */}
             {!isEditing ? (
               <div className="space-y-6">
-                {isPrivate && (
-                  <div className="flex items-center gap-3 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-xl">
-                    <span className="text-red-400 text-sm font-medium">
-                       You set your profile to <strong>Private</strong>. Alumni cannot see your information Details.
-                    </span>
-                  </div>
-                )}
                 {/* Basic Info */}
                 <section>
                   <p className="text-xs text-blue-500 font-bold uppercase tracking-widest mb-3">Basic Information</p>
@@ -245,39 +252,61 @@ export default function ProfilePage() {
                   </div>
                 </section>
 
-                {/* Professional Info */}
+                {/* ID Request Section */}
                 <section>
-                  <p className="text-xs text-blue-500 font-bold uppercase tracking-widest mb-3">Professional & Contact</p>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {[
-                      { label: "Location", icon: MapPin, value: user.location || "-" },
-                      { label: "Contact Number", icon: Phone, value: user.contact_num || "-" },
-                      { label: "Current Job", icon: Briefcase, value: user.current_job || "-" },
-                      { label: "Company", icon: Building2, value: user.company || "-" },
-                    ].map(({ label, icon: Icon, value }) => (
-                      <div key={label}>
-                        <label className="block text-xs text-blue-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                          <Icon size={10} /> {label}
-                        </label>
-                        <div className="px-4 py-3 bg-blue-900/40 border border-blue-700/30 rounded-xl text-sm text-gray-200">{value}</div>
+                  <p className="text-xs text-blue-500 font-bold uppercase tracking-widest mb-3">Alumni ID Card Request</p>
+                  <div className="rounded-xl border border-blue-700/30 bg-blue-900/20 p-5">
+                    {idRequest?.status === "pending" && (
+                      <div className="flex flex-col gap-3">
+                        <div className="flex items-center gap-2 text-yellow-400">
+                          <IdCard size={18} />
+                          <span className="font-semibold text-sm">Request Pending</span>
+                          <span className="ml-auto px-2 py-0.5 bg-yellow-500/15 border border-yellow-500/30 text-yellow-400 text-xs rounded-full">Pending</span>
+                        </div>
+                        <p className="text-gray-400 text-xs">Your ID card request has been submitted and is waiting to be processed by staff.</p>
+                        <button onClick={handleCancelIdRequest} className="self-start flex items-center gap-2 px-4 py-2 bg-red-600/20 hover:bg-red-600/40 border border-red-500/30 text-red-300 rounded-xl text-sm transition-all">
+                          <X size={13} /> Cancel Request
+                        </button>
                       </div>
-                    ))}
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4 mt-4">
-                    <div>
-                      <label className="block text-xs text-blue-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <Wrench size={10} /> Skills
-                      </label>
-                      <div className="px-4 py-3 bg-blue-900/40 border border-blue-700/30 rounded-xl text-sm text-gray-200 min-h-[60px] whitespace-pre-wrap">{user.skills || "-"}</div>
-                    </div>
-                    <div>
-                      <label className="block text-xs text-blue-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <FileText size={10} /> Bio
-                      </label>
-                      <div className="px-4 py-3 bg-blue-900/40 border border-blue-700/30 rounded-xl text-sm text-gray-200 min-h-[60px] whitespace-pre-wrap">{user.bio || "-"}</div>
-                    </div>
+                    )}
+                    {idRequest?.status === "exported" && (
+                      <div className="flex items-center gap-2 text-blue-300">
+                        <IdCard size={18} />
+                        <span className="font-semibold text-sm">Being Processed</span>
+                        <span className="ml-auto px-2 py-0.5 bg-blue-500/15 border border-blue-500/30 text-blue-300 text-xs rounded-full">Exported</span>
+                      </div>
+                    )}
+                    {idRequest?.status === "done" && (
+                      <div className="flex items-center gap-2 text-emerald-400">
+                        <IdCard size={18} />
+                        <span className="font-semibold text-sm">ID Card Ready</span>
+                        <span className="ml-auto px-2 py-0.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs rounded-full">Done</span>
+                      </div>
+                    )}
+                    {!idRequest?.status && (
+                      <div className="flex flex-col gap-3">
+                        <div className="flex items-center gap-2 text-gray-400">
+                          <IdCard size={18} />
+                          <span className="font-semibold text-sm">No active request</span>
+                        </div>
+                        <p className="text-gray-500 text-xs">Submit a request to have your alumni ID card prepared by staff.</p>
+                        <textarea
+                          value={idRequestNote}
+                          onChange={(e) => setIdRequestNote(e.target.value)}
+                          placeholder="Optional note (e.g. pickup preference, purpose...)"
+                          rows={2}
+                          className="w-full px-4 py-2 bg-blue-900/40 border border-blue-700/40 rounded-xl text-white text-sm placeholder-gray-500 focus:outline-none focus:border-yellow-500/60 resize-none"
+                        />
+                        <button onClick={handleSubmitIdRequest} disabled={submittingRequest}
+                          className="self-start flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-blue-950 font-bold rounded-xl transition-all text-sm">
+                          {submittingRequest ? <Loader size={14} className="animate-spin" /> : <IdCard size={14} />}
+                          Request Alumni ID Card
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </section>
+
               </div>
             ) : (
               /* â”€â”€ EDIT MODE â”€â”€ */
@@ -322,39 +351,6 @@ export default function ProfilePage() {
                   </div>
                 </section>
 
-                {/* Professional & Contact */}
-                <section>
-                  <p className="text-xs text-blue-500 font-bold uppercase tracking-widest mb-3">Professional & Contact</p>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {[
-                      { label: "Location", name: "location", placeholder: "e.g. Cebu City, Philippines" },
-                      { label: "Contact Number", name: "contact_num", placeholder: "e.g. +63 912 345 6789" },
-                      { label: "Current Job", name: "current_job", placeholder: "e.g. Software Engineer" },
-                      { label: "Company", name: "company", placeholder: "e.g. Acme Corp" },
-                    ].map(({ label, name, placeholder }) => (
-                      <div key={name}>
-                        <label className="block text-xs text-blue-400 uppercase tracking-wider mb-1.5">{label}</label>
-                        <input type="text" name={name} value={(form as any)[name]} onChange={handleChange} placeholder={placeholder}
-                          className="w-full px-4 py-3 bg-blue-900/40 border border-blue-700/40 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500/60 transition-colors placeholder-blue-700" />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4 mt-4">
-                    <div>
-                      <label className="block text-xs text-blue-400 uppercase tracking-wider mb-1.5">Skills</label>
-                      <textarea name="skills" value={form.skills} onChange={handleChange} rows={3}
-                        placeholder="e.g. React, Python, Project Management"
-                        className="w-full px-4 py-3 bg-blue-900/40 border border-blue-700/40 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500/60 transition-colors placeholder-blue-700 resize-none" />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-blue-400 uppercase tracking-wider mb-1.5">Bio</label>
-                      <textarea name="bio" value={form.bio} onChange={handleChange} rows={3}
-                        placeholder="Tell us a little about yourselfâ€¦"
-                        className="w-full px-4 py-3 bg-blue-900/40 border border-blue-700/40 rounded-xl text-white text-sm focus:outline-none focus:border-yellow-500/60 transition-colors placeholder-blue-700 resize-none" />
-                    </div>
-                  </div>
-                </section>
-
                 <button type="submit" disabled={saving}
                   className="flex items-center gap-2 px-6 py-3 bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-blue-950 font-bold rounded-xl transition-all shadow-lg shadow-yellow-500/20">
                   {saving ? <Loader size={16} className="animate-spin" /> : <Check size={16} />}
@@ -369,4 +365,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

@@ -73,7 +73,7 @@ export default function EditAlumniPage() {
         <div className="absolute inset-0 rounded-full border-2 border-yellow-400/20" />
         <div className="absolute inset-0 rounded-full border-2 border-t-yellow-400 animate-spin" />
       </div>
-      <p className="text-blue-400 text-sm animate-pulse">Loading alumni recordâ€¦</p>
+      <p className="text-blue-400 text-sm animate-pulse">Loading alumni record…</p>
     </div>
   );
 
@@ -241,7 +241,7 @@ export default function EditAlumniPage() {
               <button type="submit" disabled={saving}
                 className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-blue-950 font-bold text-sm rounded-xl transition-all shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/30 disabled:opacity-50 disabled:cursor-not-allowed">
                 {saving ? (
-                  <><Loader size={16} className="animate-spin" /> Saving Changesâ€¦</>
+                  <><Loader size={16} className="animate-spin" /> Saving Changes…</>
                 ) : (
                   <><Save size={16} /> Save Changes</>
                 )}

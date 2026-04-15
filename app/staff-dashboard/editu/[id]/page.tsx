@@ -35,6 +35,8 @@ export default function EditUserPage() {
   const [recordsLoading, setRecordsLoading] = useState(true);
 
   useEffect(() => {
+    const role = localStorage.getItem("userRole");
+    if (role !== "admin" && role !== "staff" && role !== "id-staff") { router.push("/"); return; }
     if (params.id) fetchUser();
     fetchAlumniRecords();
   }, [params.id]);
@@ -111,7 +113,7 @@ export default function EditUserPage() {
         <div className="absolute inset-0 rounded-full border-2 border-yellow-400/20" />
         <div className="absolute inset-0 rounded-full border-2 border-t-yellow-400 animate-spin" />
       </div>
-      <p className="text-blue-400 text-sm animate-pulse">Loading user recordâ€¦</p>
+      <p className="text-blue-400 text-sm animate-pulse">Loading user record…</p>
     </div>
   );
 
@@ -244,7 +246,7 @@ export default function EditUserPage() {
 
                   <button type="submit" disabled={saving}
                     className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-blue-950 font-bold text-sm rounded-xl transition-all shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/30 disabled:opacity-50 disabled:cursor-not-allowed">
-                    {saving ? <><Loader size={16} className="animate-spin" /> Savingâ€¦</> : <><Save size={16} /> Save Changes</>}
+                    {saving ? <><Loader size={16} className="animate-spin" /> Saving…</> : <><Save size={16} /> Save Changes</>}
                   </button>
                 </form>
               </div>
@@ -273,7 +275,7 @@ export default function EditUserPage() {
                   <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-blue-500" />
                   <input
                     type="text"
-                    placeholder="Search by ID, name, year, or courseâ€¦"
+                    placeholder="Search by ID, name, year, or course…"
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
                     className="w-full pl-9 pr-4 py-2.5 bg-blue-900/30 border border-blue-700/40 hover:border-blue-600/60 focus:border-yellow-500/50 focus:outline-none rounded-xl text-white text-sm transition-colors placeholder-blue-700"
@@ -285,7 +287,7 @@ export default function EditUserPage() {
                   {recordsLoading ? (
                     <div className="flex items-center justify-center py-16 gap-3">
                       <div className="w-6 h-6 border-2 border-t-blue-400 border-blue-800 rounded-full animate-spin" />
-                      <p className="text-blue-400 text-sm">Loading recordsâ€¦</p>
+                      <p className="text-blue-400 text-sm">Loading records…</p>
                     </div>
                   ) : filteredRecords.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-16 gap-2">
@@ -327,4 +329,3 @@ export default function EditUserPage() {
     </div>
   );
 }
-

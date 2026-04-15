@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import StaffSidebar from "@/app/components/staff-sidebar";
-import { Search, Users, Database, FileX, CheckCircle, XCircle, Edit } from "lucide-react";
+import { Search, Users, FileX, CheckCircle, XCircle, Edit } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { sendBackendEmailFromResponse } from "@/lib/send-backend-email";
+import AlumniCsvUploadButton from "@/app/components/alumni-csv-upload-button";
+import UserEditModal from "@/app/components/user-edit-modal";
 
 type UserType = {
   id: number;
@@ -33,14 +35,16 @@ export default function StaffUserManagePage() {
   const [filtered, setFiltered] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [alumniRecords, setAlumniRecords] = useState<AlumniRecordType[]>([]);
+  const [editUser, setEditUser] = useState<UserType | null>(null);
   const [rejectModal, setRejectModal] = useState<{ show: boolean; userId: number | null }>({ show: false, userId: null });
   const [rejectReason, setRejectReason] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     const role = localStorage.getItem("userRole");
-    if (role !== "admin" && role !== "staff") { router.push("/"); return; }
+    if (role !== "admin" && role !== "staff" && role !== "id-staff") { router.push("/"); return; }
     fetchUsers();
     fetchAlumniRecords();
   }, [router]);
@@ -50,7 +54,6 @@ export default function StaffUserManagePage() {
       const res = await fetch(apiUrl("/api/users/"));
       const data = await res.json();
       setUsers(data);
-      setFiltered(data);
     } catch { console.error("Failed to fetch users"); }
     finally { setLoading(false); }
   };
@@ -67,30 +70,34 @@ export default function StaffUserManagePage() {
     }
   };
 
-  const handleSearch = (value: string) => {
-    setSearchTerm(value);
-    setFiltered(users.filter(u =>
-      u.alumni_id?.toLowerCase().includes(value.toLowerCase()) ||
-      `${u.first_name} ${u.middle_name} ${u.last_name}`.toLowerCase().includes(value.toLowerCase()) ||
-      u.email.toLowerCase().includes(value.toLowerCase()) ||
-      u.course?.toLowerCase().includes(value.toLowerCase()) ||
-      u.year_graduate?.toString().includes(value)
-    ));
-  };
+  useEffect(() => {
+    const term = searchTerm.toLowerCase();
+    setFiltered(
+      users.filter((u) => {
+        if (u.id === 1 || u.status === "rejected") return false;
+        const matchesSearch =
+          u.alumni_id?.toLowerCase().includes(term) ||
+          `${u.first_name} ${u.middle_name} ${u.last_name}`.toLowerCase().includes(term) ||
+          u.email.toLowerCase().includes(term) ||
+          u.course?.toLowerCase().includes(term) ||
+          u.year_graduate?.toString().includes(searchTerm);
+        const matchesStatus = statusFilter === "all" || u.status === statusFilter;
+        return matchesSearch && matchesStatus;
+      })
+    );
+  }, [users, searchTerm, statusFilter]);
 
   const normalize = (value?: string | number | null) => String(value ?? "").trim().toLowerCase();
 
   const hasMatchingAlumniRecord = (user: UserType) =>
     alumniRecords.some((record) =>
       normalize(record.alumni_id) === normalize(user.alumni_id) &&
-      normalize(record.first_name) === normalize(user.first_name) &&
       normalize(record.category?.name) === normalize(user.course) &&
       String(record.year_graduate || "") === String(user.year_graduate || "")
     );
 
   const canApprove = (u: UserType) => {
     if (!u.alumni_id?.trim()) return { allowed: false, reason: "Alumni ID required" };
-    if (!u.first_name?.trim()) return { allowed: false, reason: "First name required" };
     if (!u.course?.trim()) return { allowed: false, reason: "Course required" };
     if (!u.year_graduate || u.year_graduate <= 0) return { allowed: false, reason: "Graduation year required" };
     if (!hasMatchingAlumniRecord(u)) return { allowed: false, reason: "No matching alumni record found" };
@@ -132,11 +139,6 @@ export default function StaffUserManagePage() {
     } catch { alert("Server connection failed"); }
   };
 
-  const statusColor = (s: string) =>
-    s === "approved" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" :
-    s === "rejected" ? "bg-red-500/20 text-red-400 border border-red-500/30" :
-    "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30";
-
   return (
     <div className="flex min-h-screen bg-[#020d1f] text-gray-100">
       <StaffSidebar />
@@ -152,21 +154,29 @@ export default function StaffUserManagePage() {
         </div>
 
         <div className="flex gap-3 mb-6">
-          <button onClick={() => router.push("/staff-dashboard/alumni-records")}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-blue-300 rounded-lg transition-all text-sm font-medium">
-            <Database size={15} /> Alumni Records
-          </button>
+          <AlumniCsvUploadButton showDelete={false} onUploaded={fetchAlumniRecords} />
           <button onClick={() => router.push("/staff-dashboard/rejecteds")}
             className="flex items-center gap-2 px-4 py-2 bg-red-600/20 hover:bg-red-600/40 border border-red-500/30 text-red-300 rounded-lg transition-all text-sm font-medium">
             <FileX size={15} /> Rejected Records
           </button>
         </div>
 
-        <div className="relative mb-6">
-          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input type="text" placeholder="Search by Alumni ID, Name, Email, Course, or Year..."
-            value={searchTerm} onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500/50 transition-colors" />
+        <div className="mb-6 flex flex-col gap-3 md:flex-row">
+          <div className="relative flex-1">
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input type="text" placeholder="Search by Alumni ID, Name, Email, Course, or Year..."
+              value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500/50 transition-colors" />
+          </div>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="min-w-[180px] px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-gray-700 focus:outline-none focus:border-yellow-500/50 transition-colors"
+          >
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+          </select>
         </div>
 
         {loading ? (
@@ -181,14 +191,15 @@ export default function StaffUserManagePage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-white/8 bg-white/5">
-                    {["Alumni ID","Name","Email","Gender","Age","Course","Year","Status","Actions"].map(h => (
+                    {["Alumni ID","Name","Email","Gender","Age","Course","Year","Actions"].map(h => (
                       <th key={h} className="px-5 py-4 text-left text-xs font-semibold text-yellow-400 uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {filtered.filter(u => u.id !== 1 && u.status !== "rejected").map((user) => {
+                  {filtered.map((user) => {
                     const check = canApprove(user);
+                    const approveDisabled = user.status === "approved" || !check.allowed;
                     return (
                       <tr key={user.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                         <td className="px-5 py-4 text-sm font-mono">{user.alumni_id || <span className="text-red-400 italic text-xs">missing</span>}</td>
@@ -199,27 +210,24 @@ export default function StaffUserManagePage() {
                         <td className="px-5 py-4 text-sm text-gray-400">{user.course}</td>
                         <td className="px-5 py-4 text-sm text-gray-400">{user.year_graduate || <span className="text-red-400 italic text-xs">missing</span>}</td>
                         <td className="px-5 py-4">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusColor(user.status)}`}>{user.status}</span>
-                        </td>
-                        <td className="px-5 py-4">
                           <div className="flex gap-1.5">
-                            <button onClick={() => router.push(`/staff-dashboard/editu/${user.id}`)}
+                            <button onClick={() => setEditUser(user)}
                               className="p-1.5 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-blue-300 rounded-lg transition-all" title="Edit">
                               <Edit size={13} />
                             </button>
-                            {user.status !== "approved" && (
-                              <>
-                                <button onClick={() => handleApprove(user.id)} disabled={!check.allowed}
-                                  title={check.allowed ? "Approve" : check.reason}
-                                  className={`p-1.5 border rounded-lg transition-all ${check.allowed ? "bg-emerald-600/20 hover:bg-emerald-600/40 border-emerald-500/30 text-emerald-300" : "bg-white/5 border-white/10 text-gray-600 cursor-not-allowed"}`}>
+                            <>
+                                <button onClick={() => handleApprove(user.id)} disabled={approveDisabled}
+                                  title={user.status === "approved" ? "Already approved" : check.allowed ? "Approve" : check.reason}
+                                  className={`p-1.5 border rounded-lg transition-all ${approveDisabled ? "bg-white/5 border-white/10 text-gray-600 cursor-not-allowed" : "bg-emerald-600/20 hover:bg-emerald-600/40 border-emerald-500/30 text-emerald-300"}`}>
                                   <CheckCircle size={13} />
                                 </button>
+                                {user.status !== "approved" && (
                                 <button onClick={() => { setRejectReason(""); setRejectModal({ show: true, userId: user.id }); }}
                                   className="p-1.5 bg-orange-600/20 hover:bg-orange-600/40 border border-orange-500/30 text-orange-300 rounded-lg transition-all" title="Reject">
                                   <XCircle size={13} />
                                 </button>
-                              </>
-                            )}
+                                )}
+                            </>
                           </div>
                         </td>
                       </tr>
@@ -231,6 +239,14 @@ export default function StaffUserManagePage() {
           </div>
         )}
       </main>
+
+      <UserEditModal
+        open={!!editUser}
+        user={editUser}
+        alumniRecords={alumniRecords}
+        onClose={() => setEditUser(null)}
+        onSaved={fetchUsers}
+      />
 
       {rejectModal.show && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">

@@ -41,7 +41,7 @@ export default function StaffDashboard() {
   useEffect(() => {
     const role = localStorage.getItem("userRole");
     const name = localStorage.getItem("userName");
-    if (role !== "staff") { router.push("/"); return; }
+    if (role !== "staff" && role !== "id-staff") { router.push("/"); return; }
     setUserName(name || "Staff");
     const saved = loadNotifState();
     setReadIds(new Set(saved.readIds || []));
@@ -151,7 +151,6 @@ export default function StaffDashboard() {
     { href: "/staff-dashboard/staff-usermanage", label: "Alumni Management", icon: Users, desc: "View and manage alumni records", accent: "blue" },
     { href: "/staff-dashboard/view-eventstaff", label: "Events", icon: Calendar, desc: "Manage events and activities", accent: "emerald" },
     { href: "/staff-dashboard/view-jobstaff", label: "Career & Jobs", icon: Search, desc: "Manage job postings", accent: "yellow" },
-    { href: "/staff-dashboard/alumni-records", label: "Alumni Records", icon: BookOpen, desc: "Manage alumni student records", accent: "cyan" },
     { href: "/staff-dashboard/staffreport-view", label: "Reports&Inquiries", icon: FileText, desc: "View all reports and inquiries", accent: "red" },
     { href: "/staff-dashboard/staff-profile", label: "My Profile", icon: UserCircle, desc: "View and update your profile", accent: "purple" },
   ];
@@ -409,4 +408,3 @@ export default function StaffDashboard() {
     </div>
   );
 }
-

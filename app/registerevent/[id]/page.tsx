@@ -99,7 +99,7 @@ export default function RegisterEventPage() {
             <div className="absolute inset-0 rounded-full border-2 border-yellow-400/20" />
             <div className="absolute inset-0 rounded-full border-2 border-t-yellow-400 animate-spin" />
           </div>
-          <p className="text-blue-400 text-sm animate-pulse">Loading event detailsâ€¦</p>
+          <p className="text-blue-400 text-sm animate-pulse">Loading event details…</p>
         </div>
       </div>
     );
@@ -260,7 +260,7 @@ export default function RegisterEventPage() {
                     onChange={(e) => setRemarks(e.target.value)}
                     rows={3}
                     className="w-full px-4 py-3 bg-blue-900/30 border border-blue-700/40 hover:border-blue-600/60 focus:border-yellow-500/50 focus:outline-none rounded-xl text-white text-sm transition-colors placeholder-blue-600 resize-none"
-                    placeholder="Any special requirements or notesâ€¦"
+                    placeholder="Any special requirements or notes…"
                   />
                 </div>
 
@@ -272,7 +272,7 @@ export default function RegisterEventPage() {
                   {submitting ? (
                     <>
                       <div className="w-4 h-4 border-2 border-blue-950/40 border-t-blue-950 rounded-full animate-spin" />
-                      Registeringâ€¦
+                      Registering…
                     </>
                   ) : (
                     <>

@@ -11,9 +11,17 @@ type JobType = {
   job_title: string;
   company_name: string;
   job_description: string;
+  employment_type: string;
+  work_setup: string;
   status: string;
   image?: string;
 };
+
+const formatLabel = (value: string) =>
+  value
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 
 export default function CareerPage() {
   const router = useRouter();
@@ -58,7 +66,8 @@ export default function CareerPage() {
       jobs.filter(
         (j) =>
           j.job_title.toLowerCase().includes(value.toLowerCase()) ||
-          j.company_name.toLowerCase().includes(value.toLowerCase())
+          j.employment_type.toLowerCase().includes(value.toLowerCase()) ||
+          j.work_setup.toLowerCase().includes(value.toLowerCase())
       )
     );
   };
@@ -78,7 +87,7 @@ export default function CareerPage() {
         <div className="mb-8">
           <input
             type="text"
-            placeholder="Search by Title or Company..."
+            placeholder="Search by title, employment type, or work setup..."
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
             className="w-full px-4 py-3 bg-blue-900/50 border border-blue-700/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400"
@@ -90,24 +99,35 @@ export default function CareerPage() {
         ) : filtered.length === 0 ? (
           <p className="text-center text-gray-400">No open job posts found.</p>
         ) : (
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((job) => (
-              <div key={job.id} className="bg-blue-900/40 backdrop-blur-lg border border-blue-700/40 rounded-2xl overflow-hidden shadow-lg">
-                {job.image && (
-                  <img src={job.image} alt={job.job_title} className="w-full h-48 object-cover" />
-                )}
-                <div className="p-6 space-y-3">
-                  <div className="flex justify-between items-start">
-                    <h2 className="text-2xl font-bold text-yellow-400">{job.job_title}</h2>
-                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-green-700/60 text-green-300">
+              <div key={job.id} className="group relative bg-gradient-to-b from-blue-900/20 to-blue-900/10 border border-blue-800/30 rounded-3xl overflow-hidden hover:border-blue-700/60 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-900/40 transition-all duration-300">
+                <div className="relative h-52 overflow-hidden bg-blue-900/40">
+                  {job.image ? (
+                    <img src={job.image} alt={job.job_title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-blue-900 to-blue-950" />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020d1f] via-transparent to-transparent" />
+                </div>
+                <div className="p-5">
+                  <div className="flex justify-between items-start gap-3 mb-3">
+                    <h2 className="text-lg font-bold text-white line-clamp-2 group-hover:text-yellow-300 transition-colors">{job.job_title}</h2>
+                    <span className="shrink-0 text-xs font-bold px-3 py-1 rounded-full bg-green-700/60 text-green-300">
                       Open
                     </span>
                   </div>
-                  <p className="text-blue-200 font-semibold"> {job.company_name}</p>
-                  <p className="text-gray-300 text-sm line-clamp-3">{job.job_description}</p>
+                  <div className="flex flex-wrap gap-2 text-sm">
+                    <span className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/12 px-3 py-1.5 text-blue-200">
+                      {formatLabel(job.employment_type)}
+                    </span>
+                    <span className="inline-flex items-center rounded-full border border-violet-500/30 bg-violet-500/12 px-3 py-1.5 text-violet-200">
+                      {formatLabel(job.work_setup)}
+                    </span>
+                  </div>
                   <button
                     onClick={() => handleViewDetails(job.id)}
-                    className="mt-2 w-full bg-yellow-500 hover:bg-yellow-400 text-blue-950 font-bold py-3 rounded-xl transition-all"
+                    className="mt-4 w-full bg-yellow-500 hover:bg-yellow-400 text-blue-950 font-bold py-3 rounded-xl transition-all"
                   >
                     View Details & Apply
                   </button>
@@ -143,4 +163,3 @@ export default function CareerPage() {
     </div>
   );
 }
-

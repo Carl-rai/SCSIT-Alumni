@@ -133,7 +133,7 @@ export default function ReportPage() {
               <div className="absolute inset-0 rounded-full border-2 border-yellow-400/20" />
               <div className="absolute inset-0 rounded-full border-2 border-t-yellow-400 animate-spin" />
             </div>
-            <p className="text-blue-400 text-sm animate-pulse">Loading your reportsâ€¦</p>
+            <p className="text-blue-400 text-sm animate-pulse">Loading your reports…</p>
           </div>
         ) : reports.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
@@ -235,7 +235,7 @@ export default function ReportPage() {
               </div>
               <button onClick={() => setSelected(null)}
                 className="w-8 h-8 flex items-center justify-center rounded-xl bg-blue-900/40 hover:bg-blue-800/60 text-blue-400 hover:text-white transition-all text-sm">
-                âœ•
+                X
               </button>
             </div>
 

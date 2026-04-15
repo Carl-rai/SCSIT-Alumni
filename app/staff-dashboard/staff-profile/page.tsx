@@ -19,7 +19,7 @@ export default function StaffProfilePage() {
   useEffect(() => {
     const role = localStorage.getItem("userRole");
     const email = localStorage.getItem("userEmail");
-    if (role !== "staff") { router.push("/"); return; }
+    if (role !== "staff" && role !== "id-staff") { router.push("/"); return; }
     fetchStaffData(email);
   }, [router]);
 
@@ -201,4 +201,3 @@ export default function StaffProfilePage() {
     </div>
   );
 }
-

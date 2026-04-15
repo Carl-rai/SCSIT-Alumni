@@ -86,7 +86,7 @@ export default function AdminAddStaffPage() {
                 <label className="block text-sm text-gray-400 mb-1.5">Role</label>
                 <select name="role" value={form.role} onChange={handleChange} className={inputCls} required>
                   <option value="staff">Staff</option>
-                  
+                  <option value="id-staff">ID Staff</option>
                 </select>
               </div>
               <button type="submit"

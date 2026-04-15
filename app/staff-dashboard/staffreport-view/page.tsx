@@ -32,7 +32,7 @@ export default function StaffReportsView() {
 
   useEffect(() => {
     const role = localStorage.getItem("userRole");
-    if (role !== "staff") { router.push("/"); return; }
+    if (role !== "staff" && role !== "id-staff") { router.push("/"); return; }
     fetchReports();
   }, [router]);
 
@@ -294,4 +294,3 @@ export default function StaffReportsView() {
     </div>
   );
 }
-

@@ -29,7 +29,7 @@ export default function StaffRejectedUsersPage() {
 
   useEffect(() => {
     const role = localStorage.getItem("userRole");
-    if (role !== "admin" && role !== "staff") { router.push("/"); return; }
+    if (role !== "admin" && role !== "staff" && role !== "id-staff") { router.push("/"); return; }
     fetchRejected();
   }, [router]);
 

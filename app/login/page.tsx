@@ -41,6 +41,7 @@ export default function LoginPage() {
         window.dispatchEvent(new Event("storage"));
         if (role === "admin") router.push("/admin-dashboard");
         else if (role === "staff") router.push("/staff-dashboard");
+        else if (role === "id-staff") router.push("/id-staff-dashboard");
         else router.push("/");
       } else if (res.status === 403) {
         showToast("Your account is pending admin approval. You'll be notified via email once approved.", "info");
@@ -91,7 +92,7 @@ export default function LoginPage() {
 
           <div className="mb-8">
             <h1 className="text-3xl font-extrabold text-white mb-2">Sign in</h1>
-            <p className="text-blue-400">Don't have an account? <Link href="/registration" className="text-yellow-400 hover:text-yellow-300 font-medium">Create one</Link></p>
+            <p className="text-blue-400">Don&apos;t have an account? <Link href="/registration" className="text-yellow-400 hover:text-yellow-300 font-medium">Create one</Link></p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">

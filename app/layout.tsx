@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthGuard from "./components/auth-guard";
+import AuditFetchProvider from "./components/audit-fetch-provider";
 import ReportChatWrapper from "./components/report-chat-wrapper";
 import { ToastProvider } from "./components/toast-provider";
 
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ToastProvider>
+          <AuditFetchProvider />
           {children}
           <AuthGuard />
           <ReportChatWrapper />

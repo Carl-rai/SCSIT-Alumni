@@ -15,6 +15,7 @@ type StaffType = {
   gender: string;
   age: number;
   position: string;
+  role: string;
   status: string;
 };
 
@@ -46,7 +47,8 @@ export default function StaffManagePage() {
     setFilteredStaff(staff.filter(m =>
       `${m.first_name} ${m.middle_name ?? ""} ${m.last_name}`.toLowerCase().includes(value.toLowerCase()) ||
       m.email.toLowerCase().includes(value.toLowerCase()) ||
-      m.position?.toLowerCase().includes(value.toLowerCase())
+      m.position?.toLowerCase().includes(value.toLowerCase()) ||
+      m.role?.toLowerCase().includes(value.toLowerCase())
     ));
   };
 
@@ -111,7 +113,7 @@ export default function StaffManagePage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-white/8 bg-white/5">
-                    {["Name","Email","Gender","Age","Actions"].map(h => (
+                    {["Name","Email","Gender","Age","Role","Actions"].map(h => (
                       <th key={h} className="px-5 py-4 text-left text-xs font-semibold text-yellow-400 uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
@@ -123,7 +125,7 @@ export default function StaffManagePage() {
                       <td className="px-5 py-4 text-sm text-gray-400">{member.email}</td>
                       <td className="px-5 py-4 text-sm text-gray-400">{member.gender}</td>
                       <td className="px-5 py-4 text-sm text-gray-400">{member.age}</td>
-                      
+                      <td className="px-5 py-4 text-sm text-gray-400">{member.role}</td>
                       <td className="px-5 py-4">
                         <div className="flex gap-1.5">
                           <button onClick={() => router.push(`/edit-staff/${member.id}`)}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Navbar from "../../components/navbar";
-import { GraduationCap, MapPin, Briefcase, Building2, Phone, User, BookOpen, ArrowLeft } from "lucide-react";
+import { GraduationCap, BookOpen, ArrowLeft } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 
 type AlumniProfile = {
@@ -69,15 +69,8 @@ export default function ProfileDetailsPage() {
   const isPrivate = !!profile.is_private;
 
   const infoItems = [
-    { icon: <GraduationCap size={15} className="text-yellow-400" />, label: "Alumni ID", value: profile.alumni_id },
     { icon: <BookOpen size={15} className="text-yellow-400" />, label: "Course", value: profile.course },
     { icon: <GraduationCap size={15} className="text-yellow-400" />, label: "Year Graduated", value: profile.year_graduate },
-    { icon: <User size={15} className="text-yellow-400" />, label: "Gender", value: profile.gender },
-    { icon: <User size={15} className="text-yellow-400" />, label: "Age", value: profile.age },
-    { icon: <Briefcase size={15} className="text-yellow-400" />, label: "Current Job", value: profile.current_job },
-    { icon: <Building2 size={15} className="text-yellow-400" />, label: "Company", value: profile.company },
-    { icon: <MapPin size={15} className="text-yellow-400" />, label: "Location", value: profile.location },
-    { icon: <Phone size={15} className="text-yellow-400" />, label: "Contact", value: profile.contact_num },
   ];
 
   return (
@@ -117,12 +110,8 @@ export default function ProfileDetailsPage() {
             </div>
 
             <h1 className="text-2xl font-extrabold text-white mb-1">{fullName || "Alumni"}</h1>
-            {isPrivate && (
-              <p className="text-blue-400 text-sm mb-1">{profile.current_job || "Job not specified"}</p>
-            )}
             {!isPrivate && (
               <>
-                <p className="text-blue-400 text-sm mb-1">{profile.email}</p>
                 <div className="flex items-center gap-1.5 text-blue-300 text-sm">
                   <BookOpen size={13} className="text-yellow-400" />
                   <span>{profile.course} - Batch {profile.year_graduate}</span>

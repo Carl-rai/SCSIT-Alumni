@@ -184,10 +184,7 @@ export default function AlumniHomePage() {
           )}
         </div>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-blue-400/50 text-xs">
-          <div className="w-px h-10 bg-gradient-to-b from-transparent to-blue-400/30" />
-          Scroll
-        </div>
+        
       </section>
 
       {/* â”€â”€ LOGGED IN: Latest Events & Jobs â”€â”€ */}
@@ -305,7 +302,7 @@ export default function AlumniHomePage() {
 
       ) : (
         <>
-          {/* Stats */}
+          {/* Stats
           <section className="py-16 bg-gradient-to-r from-blue-950/80 via-blue-900/40 to-blue-950/80 border-y border-blue-800/30">
             <div className="mx-auto max-w-5xl px-6 grid grid-cols-3 gap-8 text-center">
               <div className="group">
@@ -327,7 +324,7 @@ export default function AlumniHomePage() {
                 <div className="text-blue-300 font-medium">Open Job Listings</div>
               </div>
             </div>
-          </section>
+          </section> */}
 
           {/* Feature Cards */}
           <section className="py-24 px-6">

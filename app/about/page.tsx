@@ -115,7 +115,7 @@ export default function AboutPage() {
       <section className="max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1 mb-4 text-xs font-semibold tracking-widest uppercase bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded-full">
-            🚀 Our Mission
+            Our Mission
           </span>
           <h2 className="text-3xl font-bold">
             What We <span className="text-yellow-400">Stand For</span>

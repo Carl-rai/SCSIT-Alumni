@@ -12,7 +12,6 @@ const navItems = [
   { href: "/staff-dashboard/staff-usermanage", label: "Alumni Management", icon: Users },
   { href: "/staff-dashboard/view-eventstaff", label: "Events", icon: Calendar },
   { href: "/staff-dashboard/view-jobstaff", label: "Career & Jobs", icon: Search },
-  { href: "/staff-dashboard/alumni-records", label: "Alumni Records", icon: BookOpen },
   { href: "/staff-dashboard/staffreport-view", label: "Reports", icon: FileText },
   { href: "/staff-dashboard/staff-profile", label: "My Profile", icon: UserCircle },
 ];
