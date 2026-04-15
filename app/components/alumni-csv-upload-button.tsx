@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Upload, FileSpreadsheet, ExternalLink, RefreshCw, Trash2, X } from "lucide-react";
-import { apiUrl, proxyApiUrl } from "@/lib/api";
+import { apiUrl } from "@/lib/api";
 
 type AlumniCsvUploadItem = {
   id: number;
@@ -35,7 +35,7 @@ export default function AlumniCsvUploadButton({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const getOpenUrl = (upload: AlumniCsvUploadItem) =>
-    apiUrl(`/api/alumni-csv-uploads/${upload.id}/open/`);
+    `/api/alumni-csv-uploads/${upload.id}/open/`;
 
   const getAuthHeaders = (): Record<string, string> => {
     const token = localStorage.getItem("accessToken");
@@ -79,7 +79,7 @@ export default function AlumniCsvUploadButton({
   const fetchUploads = async () => {
     setLoadingUploads(true);
     try {
-      const res = await fetch(proxyApiUrl("/api/alumni-csv-uploads/"));
+      const res = await fetch("/api/alumni-csv-uploads/");
       const data = await res.json().catch(() => []);
       if (res.ok && Array.isArray(data)) {
         setUploads(data);
@@ -113,7 +113,7 @@ export default function AlumniCsvUploadButton({
     setError("");
 
     try {
-      const res = await fetch(proxyApiUrl("/api/alumni-csv-uploads/"), {
+      const res = await fetch("/api/alumni-csv-uploads/", {
         method: "POST",
         body: formData,
       });
@@ -147,7 +147,7 @@ export default function AlumniCsvUploadButton({
 
     try {
       const doDelete = async (token?: string | null) =>
-        fetch(proxyApiUrl(`/api/alumni-csv-uploads/${uploadId}/`), {
+        fetch(`/api/alumni-csv-uploads/${uploadId}/`, {
           method: "DELETE",
           headers: token ? { Authorization: `Bearer ${token}` } : getAuthHeaders(),
         });
