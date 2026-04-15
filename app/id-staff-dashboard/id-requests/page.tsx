@@ -58,7 +58,7 @@ export default function IdStaffRequestsPage() {
 
   const handleExport = () => {
     const exportedRequests = [...requests];
-    fetch(`/api/id-requests/export/?status=${statusFilter}`, {
+    fetch(apiUrl(`/api/id-requests/export/?status=${statusFilter}`), {
       headers: { Authorization: `Bearer ${getToken()}` },
     })
       .then((res) => res.blob())
@@ -91,7 +91,7 @@ export default function IdStaffRequestsPage() {
 
     setImporting(true);
     try {
-      const res = await fetch("/api/id-requests/import/", {
+      const res = await fetch(apiUrl("/api/id-requests/import/"), {
         method: "POST",
         headers: { Authorization: `Bearer ${getToken()}` },
         body: formData,
