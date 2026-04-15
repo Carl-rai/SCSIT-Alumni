@@ -3,6 +3,10 @@ import { proxyToBackend } from "../../../_backend-proxy";
 
 export const runtime = "nodejs";
 
-export async function GET(req: NextRequest, context: { params: { id: string } }) {
-  return proxyToBackend(req, `/api/alumni-csv-uploads/${context.params.id}/open/`);
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
+  return proxyToBackend(req, `/api/alumni-csv-uploads/${id}/open/`);
 }
