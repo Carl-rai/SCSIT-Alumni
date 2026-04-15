@@ -37,7 +37,7 @@ export default function AlumniCsvUploadButton({
   const getOpenUrl = (upload: AlumniCsvUploadItem) =>
     apiUrl(`/api/alumni-csv-uploads/${upload.id}/open/`);
 
-  const getAuthHeaders = () => {
+  const getAuthHeaders = (): Record<string, string> => {
     const token = localStorage.getItem("accessToken");
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
