@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Activity, AlertTriangle, CheckCircle2, Clock3, Filter, Search, ShieldAlert, UserCog } from "lucide-react";
 import AdminSidebar from "../../components/admin-sidebar";
-import { apiUrl } from "@/lib/api";
+import { proxyApiUrl } from "@/lib/api";
 
 type AuditLog = {
   id: number;
@@ -52,7 +52,7 @@ export default function AuditLogsPage() {
   const fetchLogs = async () => {
     try {
       const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
-      const res = await fetch(apiUrl("/api/audit-logs/?limit=250"), {
+      const res = await fetch(proxyApiUrl("/api/audit-logs/?limit=250"), {
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
       const data = await res.json();

@@ -19,15 +19,14 @@ async function proxyRequest(req: NextRequest, pathParts: string[]) {
   headers.delete("host");
   headers.delete("content-length");
 
-  const init: RequestInit & { duplex?: "half" } = {
+  const init: RequestInit = {
     method: req.method,
     headers,
     redirect: "manual",
   };
 
   if (!["GET", "HEAD"].includes(req.method)) {
-    init.body = req.body;
-    init.duplex = "half";
+    init.body = Buffer.from(await req.arrayBuffer());
   }
 
   const upstream = await fetch(targetUrl, init);
@@ -65,4 +64,3 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ path
   const { path } = await context.params;
   return proxyRequest(req, path);
 }
-

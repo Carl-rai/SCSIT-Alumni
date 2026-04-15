@@ -2,7 +2,7 @@
 
 import { useLayoutEffect } from "react";
 
-export default function AuditFetchProvider() {
+export default function AuditFetchProvider({ children }: { children: React.ReactNode }) {
   useLayoutEffect(() => {
     const originalFetch = window.fetch.bind(window);
 
@@ -37,5 +37,5 @@ export default function AuditFetchProvider() {
     };
   }, []);
 
-  return null;
+  return <>{children}</>;
 }
