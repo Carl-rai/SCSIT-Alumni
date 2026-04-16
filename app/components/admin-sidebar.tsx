@@ -15,7 +15,7 @@ const navItems = [
   { href: "/admin-dashboard/view-eventadmin", label: "Events", icon: Calendar },
   { href: "/admin-dashboard/view-jobadmin", label: "Career & Jobs", icon: Search },
   { href: "/admin-dashboard/adminreports-view", label: "Reports", icon: FileText },
-  { href: "/admin-dashboard/audit-logs", label: "Audit Logs", icon: ShieldAlert },
+  // { href: "/admin-dashboard/audit-logs", label: "Audit Logs", icon: ShieldAlert },
 ];
 
 type SidebarContentProps = {
