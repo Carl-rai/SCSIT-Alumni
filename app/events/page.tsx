@@ -35,7 +35,6 @@ export default function EventsPage() {
       const res = await fetch(apiUrl("/api/events/"));
       const data = await res.json();
       setEvents(data);
-      setFilteredEvents(data);
     } catch { console.error("Failed to fetch events"); }
   };
 
@@ -49,6 +48,20 @@ export default function EventsPage() {
       )
     );
   };
+
+  useEffect(() => {
+    if (searchTerm) {
+      setFilteredEvents(
+        events.filter((e: any) =>
+          e.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          e.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          e.date.includes(searchTerm)
+        )
+      );
+    } else {
+      setFilteredEvents(events);
+    }
+  }, [events, searchTerm]);
 
   const isFull = (e: any) => e.capacity != null && e.slots_remaining === 0;
 

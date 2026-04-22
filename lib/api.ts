@@ -5,7 +5,7 @@ export const API_PATHS = {
   alumniCsvUploads: "/api/alumni-csv-uploads/",
   alumniCsvUploadOpen: (uploadId: number | string) => `/api/alumni-csv-uploads/${uploadId}/open/`,
   alumniCsvUploadDetail: (uploadId: number | string) => `/api/alumni-csv-uploads/${uploadId}/`,
-  auditLogs: "/api/audit-logs/?limit=250",
+  auditLogs: "/api/audit-logs/?limit=all",
 } as const;
 
 export function apiUrl(path: string) {

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import IdStaffSidebar from "@/app/components/id-staff-sidebar";
-import { IdCard, Download, CheckCircle, RefreshCw, Upload } from "lucide-react";
+import { IdCard, Download, RefreshCw, Upload } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import {
   buildIdRequestExportEmailPayload,
@@ -33,19 +33,11 @@ export default function IdStaffRequestsPage() {
   const [requests, setRequests] = useState<IDRequestItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("pending");
-  const [markingDone, setMarkingDone] = useState<number | null>(null);
+  const [updatingRequestId, setUpdatingRequestId] = useState<number | null>(null);
   const [importing, setImporting] = useState(false);
   const [importFile, setImportFile] = useState<File | null>(null);
 
-  useEffect(() => {
-    const role = localStorage.getItem("userRole");
-    if (role !== "id-staff") { router.push("/"); return; }
-    fetchRequests();
-  }, [router, statusFilter]);
-
-  const getToken = () => localStorage.getItem("accessToken") || "";
-
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(apiUrl(`/api/id-requests/?status=${statusFilter}`), {
@@ -54,6 +46,57 @@ export default function IdStaffRequestsPage() {
       if (res.ok) setRequests(await res.json());
     } catch { console.error("Failed to fetch ID requests"); }
     finally { setLoading(false); }
+  }, [statusFilter]);
+
+  useEffect(() => {
+    const role = localStorage.getItem("userRole");
+    if (role !== "id-staff") { router.push("/"); return; }
+    fetchRequests();
+  }, [router, fetchRequests]);
+
+  const getToken = () => localStorage.getItem("accessToken") || "";
+
+  const sendStatusEmail = async (request: IDRequestItem, nextStatus: string) => {
+    if (!request.email) return;
+
+    if (nextStatus === "exported") {
+      await sendBackendEmailPayload(buildIdRequestExportEmailPayload(request));
+    }
+
+    if (nextStatus === "done") {
+      await sendBackendEmailPayload(buildIdRequestReadyEmailPayload(request));
+    }
+  };
+
+  const handleStatusChange = async (request: IDRequestItem, nextStatus: string) => {
+    if (request.status === nextStatus) return;
+
+    setUpdatingRequestId(request.id);
+    try {
+      const res = await fetch(apiUrl(`/api/id-requests/${request.id}/status/`), {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
+        body: JSON.stringify({ status: nextStatus }),
+      });
+
+      if (!res.ok) {
+        alert("Failed to update status.");
+        return;
+      }
+
+      try {
+        await sendStatusEmail(request, nextStatus);
+      } catch (emailError) {
+        console.error("Failed to send ID request status email", emailError);
+        alert("Status updated, but the email notification could not be sent.");
+      }
+
+      fetchRequests();
+    } catch {
+      alert("Server connection failed.");
+    } finally {
+      setUpdatingRequestId(null);
+    }
   };
 
   const handleExport = () => {
@@ -121,27 +164,7 @@ export default function IdStaffRequestsPage() {
     }
   };
 
-  const handleMarkDone = async (id: number) => {
-    setMarkingDone(id);
-    try {
-      const res = await fetch(apiUrl(`/api/id-requests/${id}/status/`), {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
-        body: JSON.stringify({ status: "done" }),
-      });
-      if (res.ok) {
-        // find the request and send the ready email
-        const req = requests.find((r) => r.id === id);
-        if (req) {
-          sendBackendEmailPayload(buildIdRequestReadyEmailPayload(req)).catch(() => {});
-        }
-        fetchRequests();
-      } else alert("Failed to update status.");
-    } catch { alert("Server connection failed."); }
-    finally { setMarkingDone(null); }
-  };
-
-  const showActions = statusFilter === "pending";
+  const showActions = statusFilter === "exported";
 
   const statusBadge = (s: string) => {
     if (s === "pending") return "bg-yellow-500/15 border-yellow-500/30 text-yellow-400";
@@ -251,16 +274,15 @@ export default function IdStaffRequestsPage() {
                       </td>
                       {showActions && (
                         <td className="px-4 py-3">
-                          {r.status !== "done" && (
-                          <button
-                            onClick={() => handleMarkDone(r.id)}
-                            disabled={markingDone === r.id}
-                            title="Mark as Done"
-                            className="p-1.5 bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-emerald-300 rounded-lg transition-all disabled:opacity-50"
+                          <select
+                            value={r.status}
+                            onChange={(e) => handleStatusChange(r, e.target.value)}
+                            disabled={updatingRequestId === r.id}
+                            className="min-w-[120px] rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white focus:outline-none focus:border-cyan-500/50 disabled:opacity-50"
                           >
-                            <CheckCircle size={13} />
-                          </button>
-                          )}
+                            <option value="exported" className="bg-[#0a1628]">Exported</option>
+                            <option value="done" className="bg-[#0a1628]">Done</option>
+                          </select>
                         </td>
                       )}
                     </tr>

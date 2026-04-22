@@ -74,19 +74,19 @@ export default function JobDetailsApplyPage() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-950 via-blue-900 to-blue-950 flex items-center justify-center text-white">
+    <div className="min-h-screen bg-[#020d1f] flex items-center justify-center text-white">
       Loading...
     </div>
   );
 
   if (!job) return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-950 via-blue-900 to-blue-950 flex items-center justify-center text-white">
+    <div className="min-h-screen bg-[#020d1f] flex items-center justify-center text-white">
       Job not found.
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-950 via-blue-900 to-blue-950 text-gray-100">
+    <div className="min-h-screen bg-[#020d1f] text-gray-100">
       <Navbar />
 
       <main className="mx-auto max-w-3xl px-6 py-16">
@@ -128,8 +128,8 @@ export default function JobDetailsApplyPage() {
             <div className="border-t border-blue-700/40 pt-4 space-y-2 text-sm text-gray-400">
               <p className="text-yellow-400 font-semibold text-base">Application Info</p>
               <p>Deadline: {job.application_deadline}</p>
-              {job.contact_person && <p>ðŸ‘¤ Contact: {job.contact_person}</p>}
-              <p>Posted by: {job.posted_by_name || "-"}</p>
+              {job.contact_person && <p>Contact: {job.contact_person}</p>}
+              {/* <p>Posted by: {job.posted_by_name || "-"}</p> */}
               <p>Date Posted: {job.date_posted}</p>
               <p>Apply to: {job.application_link_or_email}</p>
             </div>
@@ -146,4 +146,3 @@ export default function JobDetailsApplyPage() {
     </div>
   );
 }
-

@@ -37,6 +37,7 @@ export default function AuditLogsPage() {
   const router = useRouter();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
 
@@ -51,13 +52,23 @@ export default function AuditLogsPage() {
 
   const fetchLogs = async () => {
     try {
+      setError(null);
       const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
       const res = await fetch(API_PATHS.auditLogs, {
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        const message =
+          (data && typeof data === "object" && "error" in data && String((data as { error?: unknown }).error)) ||
+          `Failed to load audit logs (${res.status})`;
+        throw new Error(message);
+      }
+
       setLogs(Array.isArray(data) ? data : []);
-    } catch {
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load audit logs");
       setLogs([]);
     } finally {
       setLoading(false);
@@ -154,9 +165,7 @@ export default function AuditLogsPage() {
                 <option value="admin" className="bg-blue-950">Admin</option>
                 <option value="staff" className="bg-blue-950">Staff</option>
                 <option value="id-staff" className="bg-blue-950">ID Staff</option>
-                <option value="user" className="bg-blue-950">User</option>
                 <option value="anonymous" className="bg-blue-950">Anonymous</option>
-                <option value="system" className="bg-blue-950">System</option>
               </select>
             </div>
           </div>
@@ -168,7 +177,7 @@ export default function AuditLogsPage() {
           ) : filtered.length === 0 ? (
             <div className="text-center py-20 text-blue-400 rounded-2xl border border-white/10 bg-white/5">
               <AlertTriangle size={48} className="mx-auto mb-4 opacity-30" />
-              <p>No audit logs found.</p>
+              <p>{error || "No audit logs found."}</p>
             </div>
           ) : (
             <div className="bg-blue-900/20 border border-blue-800/40 rounded-2xl overflow-hidden">
