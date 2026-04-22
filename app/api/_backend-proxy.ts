@@ -26,6 +26,7 @@ export async function proxyToBackend(req: NextRequest, backendPath: string) {
     const responseHeaders = new Headers(upstream.headers);
     responseHeaders.delete("content-encoding");
     responseHeaders.delete("transfer-encoding");
+    responseHeaders.set("cache-control", "no-store, max-age=0");
 
     return new NextResponse(upstream.body, {
       status: upstream.status,

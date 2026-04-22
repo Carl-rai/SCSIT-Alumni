@@ -55,6 +55,7 @@ export default function AuditLogsPage() {
       setError(null);
       const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
       const res = await fetch(API_PATHS.auditLogs, {
+        cache: "no-store",
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
       const data = await res.json().catch(() => null);
